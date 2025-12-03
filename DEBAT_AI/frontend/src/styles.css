@@ -1,3 +1,6 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 /* You can add global styles to this file, and also import other style files */
 
 :root {
@@ -30,6 +33,14 @@ body {
   padding: 0;
   min-height: 100vh;
   box-sizing: border-box;
+  display: flex; /* Make body a flex container */
+  flex-direction: column; /* Stack children vertically */
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allow app-root to take available space */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -37,5 +48,17 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
 
-/* Import Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* Background styles for specific pages */
+body.homepage-background {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('assets/images/Dualité.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+body.debate-background {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('assets/images/discussion.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}

@@ -8,7 +8,7 @@
   <section class="user-input-section">
     <input 
       type="text" 
-      class="neumorphic-input-inset"
+      class="modern-input"
       id="username" 
       placeholder="Enter your username to begin"
       [(ngModel)]="username"
@@ -23,7 +23,7 @@
   <main class="topics-grid" *ngIf="debates.length > 0">
     <div 
       *ngFor="let debate of debates" 
-      class="topic-card neumorphic" 
+      class="topic-card" 
       (click)="joinDebate(debate.id)"
       tabindex="0"
       (keydown.enter)="joinDebate(debate.id)">

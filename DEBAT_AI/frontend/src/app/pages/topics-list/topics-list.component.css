@@ -7,6 +7,10 @@
   max-width: 1200px;
   margin: 0 auto;
   text-align: center;
+  padding: 2rem; /* Add overall padding for airy feel */
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for content area */
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for professional look */
 }
 
 .header-section h1 {
@@ -25,28 +29,27 @@
   margin-bottom: 3rem;
 }
 
-.neumorphic-input-inset {
+.modern-input {
   width: 100%;
   max-width: 400px;
   padding: 1rem 1.5rem;
-  border: none;
-  border-radius: 20px;
+  border: 1px solid var(--color-silk-300);
+  border-radius: 8px;
   font-size: 1rem;
   background: var(--color-silk-50);
   color: var(--color-silk-900);
-  box-shadow: inset 5px 5px 10px var(--shadow-color-dark),
-              inset -5px -5px 10px var(--shadow-color-light);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease-in-out;
 }
 
-.neumorphic-input-inset::placeholder {
+.modern-input::placeholder {
   color: var(--color-silk-400);
 }
 
-.neumorphic-input-inset:focus {
+.modern-input:focus {
   outline: none;
-  box-shadow: inset 3px 3px 6px var(--shadow-color-dark),
-              inset -3px -3px 6px var(--shadow-color-light);
+  border-color: var(--color-silk-500);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .topics-grid {
@@ -56,31 +59,21 @@
   text-align: left;
 }
 
-.neumorphic {
-  border-radius: 20px;
-  background: var(--color-silk-50);
-  box-shadow: 7px 7px 15px var(--shadow-color-dark),
-              -7px -7px 15px var(--shadow-color-light);
-  transition: all 0.3s ease-in-out;
-}
-
 .topic-card {
   padding: 1.5rem 2rem;
   cursor: pointer;
+  border-radius: 8px;
+  background: var(--color-silk-50);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+  transition: all 0.3s ease-in-out;
+  border: 1px solid var(--color-silk-200); /* Light border */
 }
 
 .topic-card:hover,
 .topic-card:focus {
   outline: none;
-  transform: translateY(-2px);
-  box-shadow: 10px 10px 20px var(--shadow-color-dark),
-              -10px -10px 20px var(--shadow-color-light);
-}
-
-.topic-card:active {
-  transform: translateY(0);
-  box-shadow: inset 5px 5px 10px var(--shadow-color-dark),
-              inset -5px -5px 10px var(--shadow-color-light);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* More pronounced shadow on hover */
 }
 
 .card-title {
