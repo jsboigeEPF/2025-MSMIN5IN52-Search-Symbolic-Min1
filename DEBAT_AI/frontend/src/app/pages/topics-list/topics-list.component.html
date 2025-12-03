@@ -1,29 +1,35 @@
-<div class="container">
-  <header>
+<div class="page-container">
+  
+  <header class="header-section">
     <h1>Debate Topics</h1>
-    <p>Choose a topic to join the discussion.</p>
+    <p>Choose a subject to join the discussion</p>
   </header>
 
-  <div class="login-section">
-    <label for="username">Your Username:</label>
+  <section class="user-input-section">
     <input 
       type="text" 
+      class="neumorphic-input-inset"
       id="username" 
-      placeholder="Enter your username"
+      placeholder="Enter your username to begin"
       [(ngModel)]="username"
       (ngModelChange)="onUsernameChange()"
     />
+  </section>
+
+  <div *ngIf="debates.length === 0" class="loading-container">
+    <p>Loading debates...</p>
   </div>
 
-  <div class="topics-list">
-    <div *ngIf="debates.length === 0" class="loading">
-      Loading debates...
+  <main class="topics-grid" *ngIf="debates.length > 0">
+    <div 
+      *ngFor="let debate of debates" 
+      class="topic-card neumorphic" 
+      (click)="joinDebate(debate.id)"
+      tabindex="0"
+      (keydown.enter)="joinDebate(debate.id)">
+      <h3 class="card-title">{{ debate.topic }}</h3>
+      <p class="card-subtitle">Click to join the debate</p>
     </div>
-    <ul>
-      <li *ngFor="let debate of debates" (click)="joinDebate(debate.id)">
-        <span>{{ debate.topic }}</span>
-        <button>Join</button>
-      </li>
-    </ul>
-  </div>
+  </main>
+
 </div>
