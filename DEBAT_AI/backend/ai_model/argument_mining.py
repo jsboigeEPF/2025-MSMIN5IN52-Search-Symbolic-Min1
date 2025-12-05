@@ -9,7 +9,7 @@ from openai import OpenAI
 # On récupère le chemin du fichier actuel pour savoir où on est
 current_file_path = Path(__file__).resolve()
 
-# On remonte de 3 niveaux pour trouver la racine (ai_engine -> backend -> RACINE)
+# On remonte de 3 niveaux pour trouver la racine (ai_model -> backend -> RACINE)
 project_root = current_file_path.parent.parent.parent
 env_path = project_root / ".env"
 
@@ -26,7 +26,7 @@ if not api_key:
 # Initialisation du client OpenAI
 client = OpenAI(api_key=api_key)
 
-# --- 2. LOGIQUE MÉTIER (TON CODE IA) ---
+# --- 2. LOGIQUE MÉTIER (CODE IA) ---
 
 SYSTEM_PROMPT = """
 Tu es un expert en "Argument Mining". Ton rôle est d'analyser une phrase dans un débat.
