@@ -63,12 +63,24 @@ def solve_vrp():
     clients = [tuple(c) for c in data['clients']]
     stations = [tuple(s) for s in data.get('stations', [])]
     nombre_vehicules = data.get('nombre_vehicules', 1)
-    capacite = data.get('capacite', 50)
     limite_temps = data.get('limite_temps', 30)
     type_vrp = data.get('type', 'classique')  # 'classique' ou 'vert'
     
+    # capacités par véhicule (nouveau)
+    capacites_vehicules = data.get('capacites_vehicules', [50] * nombre_vehicules)
+    if len(capacites_vehicules) < nombre_vehicules:
+        # compléter avec la dernière valeur ou 50 par défaut
+        derniere_capacite = capacites_vehicules[-1] if capacites_vehicules else 50
+        capacites_vehicules.extend([derniere_capacite] * (nombre_vehicules - len(capacites_vehicules)))
+    capacites_vehicules = capacites_vehicules[:nombre_vehicules]  # limiter au nombre de véhicules
+    
     # génération des paramètres par défaut
     demandes = data.get('demandes', [10] * len(clients))
+    if len(demandes) < len(clients):
+        # compléter avec 10 par défaut
+        demandes.extend([10] * (len(clients) - len(demandes)))
+    demandes = demandes[:len(clients)]  # limiter au nombre de clients
+    
     fenetres_temps = data.get('fenetres_temps', [(0, 10000)] * len(clients))
     temps_service = data.get('temps_service', [0] * len(clients))
     
@@ -79,7 +91,7 @@ def solve_vrp():
         target=_resoudre_vrp_thread,
         args=(
             solution_id, depot, clients, stations, nombre_vehicules,
-            capacite, limite_temps, type_vrp, demandes,
+            capacites_vehicules, limite_temps, type_vrp, demandes,
             fenetres_temps, temps_service
         )
     )
@@ -95,7 +107,7 @@ def _resoudre_vrp_thread(
     clients: List[Tuple[float, float]],
     stations: List[Tuple[float, float]],
     nombre_vehicules: int,
-    capacite: int,
+    capacites_vehicules: List[int],
     limite_temps: int,
     type_vrp: str,
     demandes: List[int],
@@ -138,7 +150,7 @@ def _resoudre_vrp_thread(
                 clients=clients,
                 stations_recharge=stations,
                 demandes=demandes,
-                capacite_vehicule=capacite,
+                capacites_vehicules=capacites_vehicules,
                 autonomie_max=autonomie_max,
                 consommation=consommation,
                 temps_recharge=temps_recharge,
@@ -151,7 +163,7 @@ def _resoudre_vrp_thread(
                 depot=depot,
                 clients=clients,
                 demandes=demandes,
-                capacite_vehicule=capacite,
+                capacites_vehicules=capacites_vehicules,
                 fenetres_temps=fenetres_temps,
                 temps_service=temps_service,
                 nombre_vehicules=nombre_vehicules

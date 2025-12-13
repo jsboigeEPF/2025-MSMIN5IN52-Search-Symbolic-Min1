@@ -23,7 +23,8 @@ class VRPClassique:
         depot: Tuple[float, float],
         clients: List[Tuple[float, float]],
         demandes: List[int],
-        capacite_vehicule: int,
+        capacite_vehicule: int = None,
+        capacites_vehicules: Optional[List[int]] = None,
         fenetres_temps: Optional[List[Tuple[int, int]]] = None,
         temps_service: Optional[List[int]] = None,
         nombre_vehicules: int = 1
@@ -35,7 +36,8 @@ class VRPClassique:
             depot: Coordonnées (x, y) du dépôt
             clients: Liste des coordonnées (x, y) des clients
             demandes: Liste des demandes de chaque client
-            capacite_vehicule: Capacité maximale d'un véhicule
+            capacite_vehicule: Capacité maximale d'un véhicule (déprécié, utiliser capacites_vehicules)
+            capacites_vehicules: Liste des capacités de chaque véhicule
             fenetres_temps: Liste de (début, fin) pour chaque client (optionnel)
             temps_service: Temps de service à chaque client (optionnel)
             nombre_vehicules: Nombre de véhicules disponibles
@@ -43,10 +45,23 @@ class VRPClassique:
         self.depot = depot
         self.clients = clients
         self.demandes = demandes
-        self.capacite_vehicule = capacite_vehicule
         self.fenetres_temps = fenetres_temps or [(0, 10000)] * len(clients)
         self.temps_service = temps_service or [0] * len(clients)
         self.nombre_vehicules = nombre_vehicules
+        
+        # gestion des capacités : priorité à capacites_vehicules
+        if capacites_vehicules:
+            self.capacites_vehicules = capacites_vehicules[:nombre_vehicules]
+            if len(self.capacites_vehicules) < nombre_vehicules:
+                derniere = self.capacites_vehicules[-1] if self.capacites_vehicules else 50
+                self.capacites_vehicules.extend([derniere] * (nombre_vehicules - len(self.capacites_vehicules)))
+        elif capacite_vehicule:
+            self.capacites_vehicules = [capacite_vehicule] * nombre_vehicules
+        else:
+            self.capacites_vehicules = [50] * nombre_vehicules
+        
+        # compatibilité avec l'ancien code
+        self.capacite_vehicule = self.capacites_vehicules[0] if self.capacites_vehicules else 50
         
         # calcul des distances euclidiennes
         self.distances = self._calculer_distances()
@@ -130,8 +145,9 @@ class VRPClassique:
         # variables pour la charge du véhicule
         charge = {}
         for k in range(self.nombre_vehicules):
+            capacite_k = self.capacites_vehicules[k] if k < len(self.capacites_vehicules) else self.capacite_vehicule
             for i in range(self.n):
-                charge[i, k] = model.NewIntVar(0, self.capacite_vehicule, f'load_{i}_{k}')
+                charge[i, k] = model.NewIntVar(0, capacite_k, f'load_{i}_{k}')
         
         # contraintes : chaque client visité exactement une fois
         for j in range(1, self.n):  # exclut le dépôt
@@ -152,6 +168,7 @@ class VRPClassique:
         
         # contraintes : capacité
         for k in range(self.nombre_vehicules):
+            capacite_k = self.capacites_vehicules[k] if k < len(self.capacites_vehicules) else self.capacite_vehicule
             # départ du dépôt avec charge 0
             model.Add(charge[0, k] == 0)
             
@@ -162,11 +179,11 @@ class VRPClassique:
                         demande_j = self.demandes[j-1]  # j-1 car dépôt est index 0
                         model.Add(
                             charge[j, k] >= charge[i, k] + demande_j - 
-                            self.capacite_vehicule * (1 - x[i, j, k])
+                            capacite_k * (1 - x[i, j, k])
                         )
                         model.Add(
                             charge[j, k] <= charge[i, k] + demande_j + 
-                            self.capacite_vehicule * (1 - x[i, j, k])
+                            capacite_k * (1 - x[i, j, k])
                         )
         
         # contraintes : fenêtres temporelles
