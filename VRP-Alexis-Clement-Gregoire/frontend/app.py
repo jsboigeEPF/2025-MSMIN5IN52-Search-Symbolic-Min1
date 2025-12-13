@@ -85,13 +85,21 @@ def solve_vrp():
     
     solution_id = f"solution_{int(time.time() * 1000)}"
     
+    # autonomies par véhicule (si véhicules électriques)
+    autonomies_vehicules = data.get('autonomies_vehicules', None)
+    if autonomies_vehicules and len(autonomies_vehicules) < nombre_vehicules:
+        derniere_autonomie = autonomies_vehicules[-1] if autonomies_vehicules else 30.0
+        autonomies_vehicules.extend([derniere_autonomie] * (nombre_vehicules - len(autonomies_vehicules)))
+    if autonomies_vehicules:
+        autonomies_vehicules = autonomies_vehicules[:nombre_vehicules]
+    
     # lancer la résolution dans un thread séparé
     thread = threading.Thread(
         target=_resoudre_vrp_thread,
         args=(
             solution_id, depot, clients, stations, nombre_vehicules,
             capacites_vehicules, limite_temps, type_vrp, demandes,
-            fenetres_temps, temps_service
+            fenetres_temps, temps_service, autonomies_vehicules
         )
     )
     thread.daemon = True
@@ -111,7 +119,8 @@ def _resoudre_vrp_thread(
     type_vrp: str,
     demandes: List[int],
     fenetres_temps: List[Tuple[int, int]],
-    temps_service: List[int]
+    temps_service: List[int],
+    autonomies_vehicules: Optional[List[float]] = None
 ):
     """résout le VRP dans un thread séparé"""
     try:
@@ -124,22 +133,25 @@ def _resoudre_vrp_thread(
         
         if type_vrp == 'vert':
             # paramètres pour VRP vert
-            # calculer une autonomie réaliste basée sur les distances
-            # estimer la distance moyenne entre points
-            import numpy as np
-            all_points = [depot] + clients + stations
-            distances_estimees = []
-            for i, p1 in enumerate(all_points):
-                for j, p2 in enumerate(all_points[i+1:], i+1):
-                    dist = np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
-                    distances_estimees.append(dist)
-            
-            if distances_estimees:
-                distance_moyenne = np.mean(distances_estimees)
-                # autonomie = environ 2-3 fois la distance moyenne pour forcer des recharges
-                autonomie_max = max(20.0, min(50.0, distance_moyenne * 2.5))
-            else:
-                autonomie_max = 30.0  # valeur par défaut plus réaliste
+            # utiliser les autonomies fournies ou calculer une autonomie par défaut
+            if not autonomies_vehicules or len(autonomies_vehicules) == 0:
+                # calculer une autonomie réaliste basée sur les distances
+                import numpy as np
+                all_points = [depot] + clients + stations
+                distances_estimees = []
+                for i, p1 in enumerate(all_points):
+                    for j, p2 in enumerate(all_points[i+1:], i+1):
+                        dist = np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+                        distances_estimees.append(dist)
+                
+                if distances_estimees:
+                    distance_moyenne = np.mean(distances_estimees)
+                    # autonomie = environ 2-3 fois la distance moyenne pour forcer des recharges
+                    autonomie_defaut = max(20.0, min(50.0, distance_moyenne * 2.5))
+                else:
+                    autonomie_defaut = 30.0  # valeur par défaut plus réaliste
+                
+                autonomies_vehicules = [autonomie_defaut] * nombre_vehicules
             
             consommation = 1.0
             temps_recharge = 30
@@ -150,7 +162,7 @@ def _resoudre_vrp_thread(
                 stations_recharge=stations,
                 demandes=demandes,
                 capacites_vehicules=capacites_vehicules,
-                autonomie_max=autonomie_max,
+                autonomies_vehicules=autonomies_vehicules,
                 consommation=consommation,
                 temps_recharge=temps_recharge,
                 fenetres_temps=fenetres_temps,

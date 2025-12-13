@@ -29,6 +29,7 @@ class VRPVert:
         capacite_vehicule: int = None,
         capacites_vehicules: Optional[List[int]] = None,
         autonomie_max: float = 30.0,
+        autonomies_vehicules: Optional[List[float]] = None,
         consommation: float = 1.0,  # consommation par unité de distance
         temps_recharge: int = 30,  # temps de recharge en unités de temps
         fenetres_temps: Optional[List[Tuple[int, int]]] = None,
@@ -45,7 +46,8 @@ class VRPVert:
             demandes: Liste des demandes de chaque client
             capacite_vehicule: Capacité maximale d'un véhicule (déprécié, utiliser capacites_vehicules)
             capacites_vehicules: Liste des capacités de chaque véhicule
-            autonomie_max: Autonomie maximale de la batterie
+            autonomie_max: Autonomie maximale de la batterie (déprécié, utiliser autonomies_vehicules)
+            autonomies_vehicules: Liste des autonomies de chaque véhicule
             consommation: Consommation d'énergie par unité de distance
             temps_recharge: Temps nécessaire pour recharger complètement
             fenetres_temps: Liste de (début, fin) pour chaque client
@@ -56,7 +58,6 @@ class VRPVert:
         self.clients = clients
         self.stations_recharge = stations_recharge
         self.demandes = demandes
-        self.autonomie_max = autonomie_max
         self.consommation = consommation
         self.temps_recharge = temps_recharge
         self.fenetres_temps = fenetres_temps or [(0, 10000)] * len(clients)
@@ -76,6 +77,18 @@ class VRPVert:
         
         # compatibilité avec l'ancien code
         self.capacite_vehicule = self.capacites_vehicules[0] if self.capacites_vehicules else 50
+        
+        # gestion des autonomies : priorité à autonomies_vehicules
+        if autonomies_vehicules:
+            self.autonomies_vehicules = autonomies_vehicules[:nombre_vehicules]
+            if len(self.autonomies_vehicules) < nombre_vehicules:
+                derniere = self.autonomies_vehicules[-1] if self.autonomies_vehicules else autonomie_max
+                self.autonomies_vehicules.extend([derniere] * (nombre_vehicules - len(self.autonomies_vehicules)))
+        else:
+            self.autonomies_vehicules = [autonomie_max] * nombre_vehicules
+        
+        # compatibilité avec l'ancien code
+        self.autonomie_max = self.autonomies_vehicules[0] if self.autonomies_vehicules else autonomie_max
         
         # calcul des distances
         self.distances = self._calculer_distances()
@@ -172,12 +185,14 @@ class VRPVert:
             for i in range(self.n_total):
                 charge[i, k] = model.NewIntVar(0, capacite_k, f'load_{i}_{k}')
         
-        # variables pour le niveau de batterie (0 à autonomie_max)
+        # variables pour le niveau de batterie (0 à autonomie_max pour chaque véhicule)
         batterie = {}
         for k in range(self.nombre_vehicules):
+            autonomie_k = self.autonomies_vehicules[k] if k < len(self.autonomies_vehicules) else self.autonomie_max
+            batterie_max_k = int(autonomie_k * 100)
             for i in range(self.n_total):
                 batterie[i, k] = model.NewIntVar(
-                    0, int(self.autonomie_max * 100), f'battery_{i}_{k}'
+                    0, batterie_max_k, f'battery_{i}_{k}'
                 )
         
         # contraintes : chaque client visité exactement une fois
@@ -205,25 +220,42 @@ class VRPVert:
             capacite_k = self.capacites_vehicules[k] if k < len(self.capacites_vehicules) else self.capacite_vehicule
             model.Add(charge[0, k] == 0)  # départ avec charge vide
             
-            for j in range(1, 1 + self.n_clients):  # pour chaque client
-                demande_j = self.demandes[j-1]
+            for j in range(1, self.n_total):
                 for i in range(self.n_total):
                     if i != j:
-                        model.Add(
-                            charge[j, k] >= charge[i, k] + demande_j - 
-                            capacite_k * (1 - x[i, j, k])
-                        )
-                        model.Add(
-                            charge[j, k] <= charge[i, k] + demande_j + 
-                            capacite_k * (1 - x[i, j, k])
-                        )
+                        # vérifier si j est un client ou une station
+                        j_est_client = (1 <= j <= self.n_clients)
+                        j_est_station = (j > self.n_clients)
+                        
+                        if j_est_client:
+                            # si on arrive à un client, la charge augmente de la demande
+                            demande_j = self.demandes[j-1]
+                            model.Add(
+                                charge[j, k] >= charge[i, k] + demande_j - 
+                                capacite_k * (1 - x[i, j, k])
+                            )
+                            model.Add(
+                                charge[j, k] <= charge[i, k] + demande_j + 
+                                capacite_k * (1 - x[i, j, k])
+                            )
+                        elif j_est_station:
+                            # si on arrive à une station, la charge reste la même (pas de livraison)
+                            model.Add(
+                                charge[j, k] >= charge[i, k] - 
+                                capacite_k * (1 - x[i, j, k])
+                            )
+                            model.Add(
+                                charge[j, k] <= charge[i, k] + 
+                                capacite_k * (1 - x[i, j, k])
+                            )
         
-        # contraintes : batterie et autonomie
-        batterie_max = int(self.autonomie_max * 100)
-        
+        # contraintes : batterie et autonomie (par véhicule)
         for k in range(self.nombre_vehicules):
+            autonomie_k = self.autonomies_vehicules[k] if k < len(self.autonomies_vehicules) else self.autonomie_max
+            batterie_max_k = int(autonomie_k * 100)
+            
             # départ du dépôt avec batterie pleine
-            model.Add(batterie[0, k] == batterie_max)
+            model.Add(batterie[0, k] == batterie_max_k)
             
             for j in range(1, self.n_total):
                 for i in range(self.n_total):
@@ -238,29 +270,29 @@ class VRPVert:
                         if j_est_station:
                             # si on arrive à une station, batterie = plein après recharge
                             model.Add(
-                                batterie[j, k] >= batterie_max - 
-                                batterie_max * (1 - x[i, j, k])
+                                batterie[j, k] >= batterie_max_k - 
+                                batterie_max_k * (1 - x[i, j, k])
                             )
-                            model.Add(batterie[j, k] <= batterie_max)
+                            model.Add(batterie[j, k] <= batterie_max_k)
                         elif i_est_station:
                             # si on quitte une station, batterie de départ = plein
                             model.Add(
-                                batterie[j, k] <= batterie_max - consommation_ij + 
-                                batterie_max * (1 - x[i, j, k])
+                                batterie[j, k] <= batterie_max_k - consommation_ij + 
+                                batterie_max_k * (1 - x[i, j, k])
                             )
                             model.Add(
-                                batterie[j, k] >= batterie_max - consommation_ij - 
-                                batterie_max * (1 - x[i, j, k])
+                                batterie[j, k] >= batterie_max_k - consommation_ij - 
+                                batterie_max_k * (1 - x[i, j, k])
                             )
                         else:
                             # trajet normal entre dépôt/clients
                             model.Add(
                                 batterie[j, k] <= batterie[i, k] - consommation_ij + 
-                                batterie_max * (1 - x[i, j, k])
+                                batterie_max_k * (1 - x[i, j, k])
                             )
                             model.Add(
                                 batterie[j, k] >= batterie[i, k] - consommation_ij - 
-                                batterie_max * (1 - x[i, j, k])
+                                batterie_max_k * (1 - x[i, j, k])
                             )
                 
                 # contrainte : batterie ne peut pas être négative

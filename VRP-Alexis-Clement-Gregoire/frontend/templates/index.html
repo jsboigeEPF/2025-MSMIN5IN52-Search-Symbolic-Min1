@@ -777,7 +777,7 @@
                     
                     <div class="config-row">
                         <label>Type:</label>
-                        <select id="type-vrp" style="margin-bottom: 0;">
+                        <select id="type-vrp" onchange="toggleAutonomieColumn()" style="margin-bottom: 0;">
                             <option value="classique">Classique</option>
                             <option value="vert">Vert (Électrique)</option>
                         </select>
@@ -790,8 +790,9 @@
                         <table class="vehicules-table" id="capacites-vehicules">
                             <thead>
                                 <tr>
-                                    <th style="width: 40%;">Véhicule</th>
-                                    <th style="width: 60%;">Capacité (en unités)</th>
+                                    <th style="width: 30%;">Véhicule</th>
+                                    <th style="width: 35%;">Capacité (en unités)</th>
+                                    <th class="autonomie-col" style="width: 35%; display: none;">Autonomie (km)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -800,11 +801,17 @@
                                     <td>
                                         <input type="number" class="capacite-vehicule" value="50" min="1">
                                     </td>
+                                    <td class="autonomie-col" style="display: none;">
+                                        <input type="number" class="autonomie-vehicule" value="30" min="1" step="0.1">
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Véhicule 2</td>
                                     <td>
                                         <input type="number" class="capacite-vehicule" value="50" min="1">
+                                    </td>
+                                    <td class="autonomie-col" style="display: none;">
+                                        <input type="number" class="autonomie-vehicule" value="30" min="1" step="0.1">
                                     </td>
                                 </tr>
                             </tbody>
@@ -1094,9 +1101,22 @@
             subsection.classList.toggle('collapsed');
         }
         
+        // afficher/masquer la colonne autonomie selon le type de véhicule
+        function toggleAutonomieColumn() {
+            const typeVRP = document.getElementById('type-vrp').value;
+            const isElectrique = typeVRP === 'vert';
+            const autonomieCols = document.querySelectorAll('.autonomie-col');
+            
+            autonomieCols.forEach(col => {
+                col.style.display = isElectrique ? '' : 'none';
+            });
+        }
+        
         // mise à jour des capacités des véhicules
         function updateCapacitesVehicules() {
             const nbVehicules = parseInt(document.getElementById('nb-vehicules').value);
+            const typeVRP = document.getElementById('type-vrp').value;
+            const isElectrique = typeVRP === 'vert';
             const table = document.querySelector('#capacites-vehicules tbody');
             table.innerHTML = '';
             
@@ -1106,6 +1126,9 @@
                     <td>Véhicule ${i+1}</td>
                     <td>
                         <input type="number" class="capacite-vehicule" value="50" min="1">
+                    </td>
+                    <td class="autonomie-col" style="display: ${isElectrique ? '' : 'none'};">
+                        <input type="number" class="autonomie-vehicule" value="30" min="1" step="0.1">
                     </td>
                 `;
                 table.appendChild(row);
@@ -1340,6 +1363,13 @@
             const capacitesInputs = document.querySelectorAll('.capacite-vehicule');
             const capacites = Array.from(capacitesInputs).map(input => parseInt(input.value) || 50);
             
+            // collecter les autonomies des véhicules (si électrique)
+            let autonomies = null;
+            if (typeVRP === 'vert') {
+                const autonomiesInputs = document.querySelectorAll('.autonomie-vehicule');
+                autonomies = Array.from(autonomiesInputs).map(input => parseFloat(input.value) || 30.0);
+            }
+            
             // collecter les demandes des clients
             const demandesInputs = document.querySelectorAll('.demande-client');
             const demandes = Array.from(demandesInputs).map(input => parseInt(input.value) || 10);
@@ -1365,6 +1395,11 @@
                 limite_temps: limite_temps,
                 type: typeVRP
             };
+            
+            // ajouter les autonomies si véhicules électriques
+            if (autonomies) {
+                data.autonomies_vehicules = autonomies;
+            }
             
             try {
                 const response = await fetch('/api/solve', {
@@ -1580,6 +1615,9 @@
         
         // initialiser la sidebar comme pliée
         document.body.classList.add('sidebar-collapsed');
+        
+        // initialiser l'affichage de la colonne autonomie
+        toggleAutonomieColumn();
     </script>
 </body>
 </html>
