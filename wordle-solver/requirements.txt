@@ -1,0 +1,29 @@
+# CSP Solver
+ortools>=9.8.0
+
+# LLM Integration
+anthropic>=0.18.0
+google-genai>=0.2.0
+
+# Numerical Computing
+numpy>=1.24.0
+scipy>=1.11.0
+
+# CLI Interface
+click>=8.1.0
+rich>=13.0.0
+colorama>=0.4.6
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.5.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-asyncio>=0.21.0
+
+# Development
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0

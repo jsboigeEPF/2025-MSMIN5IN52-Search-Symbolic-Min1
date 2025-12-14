@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planification d'emploi du temps universitaire</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        h1 { color: #333; text-align: center; margin-bottom: 8px }
+        #calendar { max-width: 900px; margin: 12px auto; background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        button { padding: 8px 14px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        /* distinct color for the solver button */
+        #solve-btn { background-color: #28a745; }
+        #solve-btn:hover { background-color: #218838; }
+        .status { text-align: center; margin-top: 10px; }
+        form input, form select { width: 100%; padding: 6px 8px; box-sizing: border-box; margin-top:4px; margin-bottom:8px; }
+        label { display:block; margin-top:6px; font-weight:600 }
+        .controls { display:flex; gap:12px; justify-content:center; margin-bottom:6px }
+        #course-manager, #teacher-manager { max-width:900px }
+        ul { list-style:none; padding-left:0 }
+        ul#courses-list li, ul#teachers-list li { display:flex; align-items:center; justify-content:space-between; padding:6px 8px; border-bottom:1px solid #f0f0f0 }
+        .small-muted { color:#666; font-size:0.9em }
+    </style>
+</head>
+<body>
+    <h1>Planification d'emploi du temps universitaire</h1>
+    <div class="controls">
+        <button id="solve-btn" onclick="solveTimetable()">Résoudre l'emploi du temps</button>
+    </div>
+    <div class="status" id="status"></div>
+    <div style="max-width:900px;margin:8px auto;text-align:center">
+        <label for="room-select">Choisir une salle: </label>
+        <select id="room-select"></select>
+    </div>
+    <div style="max-width:900px;margin:8px auto;text-align:center">
+        <button id="manage-teachers-btn">Gérer les professeurs</button>
+    </div>
+    <div style="max-width:900px;margin:8px auto;text-align:center">
+        <button id="manage-courses-btn">Gérer les cours</button>
+    </div>
+    <div id="course-manager" style="max-width:900px;margin:8px auto;display:none;background:white;padding:12px;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,0.05);">
+        <h3>Créer un cours</h3>
+        <form id="course-form">
+            <div style="margin:6px 0"><label>Nom: <input type="text" id="course-name" required></label></div>
+            <div style="margin:6px 0"><label>Professeur: <select id="course-teacher"></select></label></div>
+            <div style="margin:6px 0"><label>Nombre d'étudiants: <input type="number" id="course-students" value="20" min="1"></label></div>
+            <div style="margin:6px 0"><label>Durée (heures par session): <input type="number" id="course-duration" value="1" min="1"></label></div>
+            <div style="margin:6px 0"><label>Nombre de sessions totales: <input type="number" id="course-sessions" value="10" min="1"></label></div>
+            <div style="margin:6px 0"><label>Max jours/semaine autorisés: <input type="number" id="course-max-days" value="6" min="1" max="6"></label></div>
+            <div style="margin-top:8px">
+                <button type="submit">Créer le cours</button>
+                <button type="button" id="course-cancel">Annuler</button>
+            </div>
+        </form>
+        <h4>Cours existants</h4>
+        <ul id="courses-list"></ul>
+    </div>
+    <div id="teacher-manager" style="max-width:900px;margin:8px auto;display:none;background:white;padding:12px;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,0.05);">
+        <h3>Créer un professeur</h3>
+        <form id="teacher-form">
+            <label>Nom: <input type="text" id="teacher-name" required></label>
+            <div style="margin-top:8px">
+                <strong>Disponibilités (cocher jour et préciser plage horaire)</strong>
+                <div id="days-list" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+                    <!-- JS will populate days -->
+                </div>
+            </div>
+            <div style="margin-top:8px">
+                <button type="submit">Créer</button>
+                <button type="button" id="teacher-cancel">Annuler</button>
+            </div>
+        </form>
+        <h4>Professeurs existants</h4>
+        <ul id="teachers-list"></ul>
+    </div>
+    <div id="calendar-single" style="max-width:900px;margin:0 auto;background:white;padding:12px;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,0.08);height:600px;"></div>
+    <!-- room legend removed; calendar colors are per-course -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var roomSelect = document.getElementById('room-select');
+            var calendarEl = document.getElementById('calendar-single');
+
+            // simple color palette
+            var colors = ['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd','#8c564b'];
+
+            var calendarSingle = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                initialDate: new Date().getFullYear() + '-09-01',
+                locale: 'fr',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                slotMinTime: '09:00:00',
+                slotMaxTime: '18:00:00',
+                events: []
+            });
+            calendarSingle.render();
+
+
+            // render events for a selected room
+            function renderEventsForRoom(events, roomId) {
+                calendarSingle.removeAllEvents();
+                events.forEach(function(ev) {
+                    var rid = ev.room_id || 1;
+                    if (rid === roomId) {
+                        var color = ev.color || colors[(rid-1)%colors.length];
+                        calendarSingle.addEvent({
+                            title: ev.title,
+                            start: ev.start,
+                            end: ev.end,
+                            backgroundColor: color,
+                            borderColor: color
+                        });
+                    }
+                });
+            }
+
+            window.solveTimetable = function() {
+                document.getElementById('status').innerText = 'Résolution en cours...';
+                fetch('/solve', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        var numRooms = data.num_rooms || 3;
+                        var capacities = data.room_capacity || [];
+                        // populate select
+                        roomSelect.innerHTML = '';
+                        for (var r = 1; r <= numRooms; r++) {
+                            var opt = document.createElement('option');
+                            opt.value = r;
+                            var cap = capacities[r-1] || '';
+                            opt.text = 'Salle ' + r + (cap? (' - ' + cap + ' étudiants') : '');
+                            roomSelect.appendChild(opt);
+                        }
+                        // legend removed: colors are per-course now
+                        // render default room (1)
+                        var selected = parseInt(roomSelect.value || 1);
+                        renderEventsForRoom(data.events, selected);
+                        // on change, re-render
+                        roomSelect.onchange = function() { renderEventsForRoom(data.events, parseInt(this.value)); };
+                        document.getElementById('status').innerText = 'Emploi du temps résolu avec succès !';
+                    } else {
+                        document.getElementById('status').innerText = 'Erreur: ' + data.message;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('status').innerText = 'Erreur de connexion: ' + error;
+                });
+            };
+
+                // Course manager UI
+                var manageCoursesBtn = document.getElementById('manage-courses-btn');
+                var courseManagerDiv = document.getElementById('course-manager');
+                var courseTeacherSelect = document.getElementById('course-teacher');
+                var coursesList = document.getElementById('courses-list');
+
+                function loadTeachersIntoSelect(){
+                    fetch('/teachers').then(r=>r.json()).then(d=>{
+                        courseTeacherSelect.innerHTML = '';
+                        if(d.status === 'success'){
+                            d.teachers.forEach(function(t){
+                                var opt = document.createElement('option');
+                                opt.value = t.id;
+                                opt.text = t.name;
+                                courseTeacherSelect.appendChild(opt);
+                            });
+                        }
+                    });
+                }
+
+                function loadCoursesList(){
+                    // fetch teachers first to map ids -> names
+                    Promise.all([fetch('/teachers').then(r=>r.json()), fetch('/courses').then(r=>r.json())])
+                    .then(function([td, cd]){
+                        coursesList.innerHTML = '';
+                        var tmap = {};
+                        if(td.status === 'success') td.teachers.forEach(function(t){ tmap[t.id] = t; });
+                        if(cd.status === 'success'){
+                            cd.courses.forEach(function(c){
+                                var li = document.createElement('li');
+                                var text = document.createElement('span');
+                                var t = tmap[c.teacher_id];
+                                var teacherName = t ? t.name : ('Professeur ' + c.teacher_id);
+                                text.innerHTML = '<strong>' + c.name + '</strong><br><span class="small-muted">' + teacherName + ' — ' + c.total_sessions + ' sessions — ' + c.students + ' étudiants</span>';
+                                li.appendChild(text);
+                                var del = document.createElement('button');
+                                del.style.marginLeft = '8px';
+                                del.textContent = 'Supprimer';
+                                del.onclick = function(){ if(confirm('Supprimer le cours "'+c.name+'" ?')) deleteCourse(c.id); };
+                                li.appendChild(del);
+                                coursesList.appendChild(li);
+                            });
+                        }
+                    }).catch(function(err){ console.error(err); });
+                }
+
+                manageCoursesBtn.onclick = function(){
+                    courseManagerDiv.style.display = (courseManagerDiv.style.display === 'none')? 'block' : 'none';
+                    if(courseManagerDiv.style.display === 'block'){
+                        loadTeachersIntoSelect(); loadCoursesList();
+                    }
+                };
+
+                document.getElementById('course-cancel').onclick = function(){ courseManagerDiv.style.display = 'none'; };
+
+                document.getElementById('course-form').onsubmit = function(ev){
+                    ev.preventDefault();
+                    var name = document.getElementById('course-name').value.trim();
+                    var teacher_id = document.getElementById('course-teacher').value;
+                    var students = document.getElementById('course-students').value;
+                    var duration = document.getElementById('course-duration').value;
+                    var sessions = document.getElementById('course-sessions').value;
+                    var max_days = document.getElementById('course-max-days').value;
+                    if(!name || !teacher_id) return alert('Nom et enseignant requis');
+                    fetch('/courses',{
+                        method:'POST',
+                        headers:{'Content-Type':'application/json'},
+                        body: JSON.stringify({name:name, teacher_id:teacher_id, students:students, duration:duration, total_sessions:sessions, max_days_per_week: max_days})
+                    }).then(r=>r.json()).then(d=>{
+                        if(d.status === 'success'){
+                            alert('Cours créé');
+                            document.getElementById('course-name').value = '';
+                            loadCoursesList();
+                        } else alert('Erreur: '+(d.message||''));
+                    }).catch(err=>alert('Erreur: '+err));
+                };
+
+                window.deleteCourse = function(id){
+                    fetch('/courses/' + id, { method: 'DELETE' })
+                        .then(r=>r.json())
+                        .then(d=>{
+                            if(d.status === 'success'){
+                                alert('Cours supprimé');
+                                loadCoursesList();
+                            } else {
+                                alert('Erreur: '+(d.message||''));
+                            }
+                        }).catch(err=>alert('Erreur: '+err));
+                };
+
+                // Teacher manager UI
+                var manageBtn = document.getElementById('manage-teachers-btn');
+                var managerDiv = document.getElementById('teacher-manager');
+                // keep internal day codes but display French short names; remove Sunday
+                var days = ['Mon','Tue','Wed','Thu','Fri','Sat'];
+                var dayLabels = { 'Mon':'Lun', 'Tue':'Mar', 'Wed':'Mer', 'Thu':'Jeu', 'Fri':'Ven', 'Sat':'Sam' };
+                var daysList = document.getElementById('days-list');
+                var teachersList = document.getElementById('teachers-list');
+
+                function buildDaysInputs(){
+                    daysList.innerHTML = '';
+                    days.forEach(function(d){
+                        var container = document.createElement('div');
+                        container.style.border = '1px solid #eee';
+                        container.style.padding = '6px';
+                        container.style.borderRadius = '4px';
+                        var checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = 'day-' + d;
+                        var label = document.createElement('label');
+                        label.htmlFor = checkbox.id;
+                        label.innerText = dayLabels[d] || d;
+                        var start = document.createElement('input');
+                        start.type = 'time';
+                        start.id = 'start-' + d;
+                        start.value = '09:00';
+                        start.disabled = true;
+                        var end = document.createElement('input');
+                        end.type = 'time';
+                        end.id = 'end-' + d;
+                        end.value = '12:00';
+                        end.disabled = true;
+                        checkbox.onchange = function(){ start.disabled = !this.checked; end.disabled = !this.checked; };
+                        container.appendChild(checkbox);
+                        container.appendChild(label);
+                        container.appendChild(document.createTextNode(' '));
+                        container.appendChild(start);
+                        container.appendChild(document.createTextNode(' - '));
+                        container.appendChild(end);
+                        daysList.appendChild(container);
+                    });
+                }
+
+                function loadTeachersList(){
+                    fetch('/teachers').then(r=>r.json()).then(d=>{
+                        teachersList.innerHTML = '';
+                        if(d.status === 'success'){
+                            d.teachers.forEach(function(t){
+                                var li = document.createElement('li');
+                                // build availability tooltip text using fixed weekday order (Mon..Sat)
+                                var avail = t.availability || {};
+                                var parts = [];
+                                days.forEach(function(day){
+                                    var ranges = avail[day];
+                                    if(ranges && ranges.length){
+                                        var rtext = ranges.map(function(r){ return r[0]+"-"+r[1]; }).join(',');
+                                        parts.push((dayLabels[day]||day) + ': ' + rtext);
+                                    }
+                                });
+                                var tooltip = parts.join('; ');
+                                // count actual days with availability using our ordered days
+                                var countDays = days.reduce(function(acc, day){ return acc + ((avail[day] && avail[day].length) ? 1 : 0); }, 0);
+                                li.innerHTML = '<span>' + t.name + '</span><span class="small-muted">(' + countDays + ' jours)</span>';
+                                if(tooltip) li.title = tooltip; // hover shows availability
+
+                                // delete button for teacher
+                                var del = document.createElement('button');
+                                del.style.marginLeft = '8px';
+                                del.textContent = 'Supprimer';
+                                del.onclick = function(){
+                                    if(!confirm('Supprimer le professeur "'+t.name+'" ?')) return;
+                                    fetch('/teachers/' + t.id, { method: 'DELETE' })
+                                        .then(r=>r.json())
+                                        .then(resp=>{
+                                            if(resp.status === 'success'){
+                                                alert('Professeur supprimé');
+                                                loadTeachersList(); loadTeachersIntoSelect();
+                                            } else {
+                                                alert('Erreur: ' + (resp.message||''));
+                                            }
+                                        }).catch(err=>alert('Erreur: '+err));
+                                };
+                                li.appendChild(del);
+                                teachersList.appendChild(li);
+                            });
+                        }
+                    });
+                }
+
+                manageBtn.onclick = function(){
+                    managerDiv.style.display = (managerDiv.style.display === 'none')? 'block' : 'none';
+                    if(managerDiv.style.display === 'block') loadTeachersList();
+                };
+
+                document.getElementById('teacher-cancel').onclick = function(){ managerDiv.style.display = 'none'; };
+
+                document.getElementById('teacher-form').onsubmit = function(ev){
+                    ev.preventDefault();
+                    var name = document.getElementById('teacher-name').value.trim();
+                    if(!name) return alert('Nom requis');
+                    var availability = {};
+                    days.forEach(function(d){
+                        var c = document.getElementById('day-'+d);
+                        if(c && c.checked){
+                            var s = document.getElementById('start-'+d).value;
+                            var e = document.getElementById('end-'+d).value;
+                            if(!availability[d]) availability[d] = [];
+                            availability[d].push([s,e]);
+                        }
+                    });
+                    fetch('/teachers',{
+                        method:'POST',
+                        headers:{'Content-Type':'application/json'},
+                        body: JSON.stringify({name:name, availability:availability})
+                    }).then(r=>r.json()).then(d=>{
+                        if(d.status === 'success'){
+                            alert('Professeur créé');
+                            document.getElementById('teacher-name').value = '';
+                            buildDaysInputs();
+                            loadTeachersList();
+                        } else {
+                            alert('Erreur: ' + (d.message||''));
+                        }
+                    }).catch(err=>alert('Erreur: '+err));
+                };
+
+                buildDaysInputs();
+        });
+    </script>
+</body>
+</html>

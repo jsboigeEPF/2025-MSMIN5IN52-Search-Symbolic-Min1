@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+  .wordle-tile {
+    @apply w-14 h-14 border-2 flex items-center justify-center text-2xl font-bold uppercase transition-all duration-300;
+  }
+
+  .wordle-tile-empty {
+    @apply border-gray-300 bg-white;
+  }
+
+  .wordle-tile-correct {
+    @apply bg-wordle-green border-wordle-green text-white;
+  }
+
+  .wordle-tile-present {
+    @apply bg-wordle-yellow border-wordle-yellow text-white;
+  }
+
+  .wordle-tile-absent {
+    @apply bg-wordle-gray border-wordle-gray text-white;
+  }
+
+  .keyboard-key {
+    @apply px-3 py-4 rounded font-semibold text-sm cursor-pointer transition-all hover:opacity-90;
+  }
+
+  .keyboard-key-default {
+    @apply bg-gray-300 text-gray-800;
+  }
+
+  .keyboard-key-correct {
+    @apply bg-wordle-green text-white;
+  }
+
+  .keyboard-key-present {
+    @apply bg-wordle-yellow text-white;
+  }
+
+  .keyboard-key-absent {
+    @apply bg-wordle-gray text-white;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors font-medium disabled:bg-gray-100 disabled:cursor-not-allowed;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-md p-6;
+  }
+}
