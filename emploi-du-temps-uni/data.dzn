@@ -1,0 +1,16 @@
+% Data for university timetabling example
+num_events = 5;
+num_slots = 10;  % e.g., 10 time slots
+num_rooms = 10;
+num_teachers = 2;
+
+event_teacher = [1, 2, 1, 2, 1];
+event_duration = [1, 1, 1, 1, 1];  % Assume 1 slot each
+event_students = [20, 30, 15, 25, 10];
+
+room_capacity = [50, 40, 30, 40, 50, 30, 30, 40, 50, 35];
+
+% Teacher availability: all available for simplicity
+teacher_available = array2d(TEACHERS, SLOTS,
+    [1,1,1,1,1,1,1,1,1,1,  % Teacher 1
+     1,1,1,1,1,1,1,1,1,1]); % Teacher 2
