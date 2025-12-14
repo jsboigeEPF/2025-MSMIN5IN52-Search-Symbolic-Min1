@@ -1,4 +1,3 @@
-// frontend/src/components/GameTile.jsx
 import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 
@@ -22,7 +21,7 @@ export function GameTile({ letter, state, isRevealing, delay, isCurrentRow }) {
     "bg-[hsl(var(--muted))] text-[hsl(var(--card-foreground))] border-[hsl(var(--muted))]": state === "absent",
   });
 
-  // Glow optionnel si tu veux utiliser tes classes utilitaires
+  // Glow optionnel
   const glowClass = clsx({
     "glow-correct": state === "correct",
     "glow-present": state === "present",
@@ -32,6 +31,7 @@ export function GameTile({ letter, state, isRevealing, delay, isCurrentRow }) {
     <div
       className={clsx(
         "w-14 h-14 sm:w-16 sm:h-16 border-2 flex items-center justify-center text-2xl font-bold uppercase select-none transition-colors duration-300",
+        "rounded-xl", 
         bgClass,
         glowClass,
         flipped && "animate-pop"

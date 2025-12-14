@@ -271,6 +271,10 @@ const handleRequestAI = useCallback(async () => {
       <main className="container mx-auto px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-6 justify-center items-start">
           <div className="flex flex-col items-center">
+          <div className="mb-4 text-center">
+            <h1 className="text-3xl font-bold text-wordle">Wordle <span className="text-foreground">Solver</span></h1>
+            <p className="text-sm text-muted-foreground">Devinez moins, gagnez plus : laissez le solveur CSP et l’IA faire le reste !</p>
+          </div>
             <GameBoard
               guesses={guesses}
               results={results}

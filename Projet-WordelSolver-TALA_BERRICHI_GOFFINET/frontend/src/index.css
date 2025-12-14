@@ -23,6 +23,7 @@
     --wordle-correct: 120 60% 45%;
     --wordle-present: 45 100% 51%;
     --wordle-absent: 210 10% 80%;
+    --wordle-color: 120 60% 30%; 
   }
 
   /* ===== Dark mode ===== */
@@ -45,6 +46,7 @@
     --wordle-correct: 120 60% 45%;
     --wordle-present: 45 100% 51%;
     --wordle-absent: 210 10% 30%;
+    --wordle-color: 120 70% 60%;
   }
 
   body {
@@ -68,6 +70,10 @@
 
   .glow-present {
     box-shadow: 0 0 10px hsl(var(--wordle-present) / 0.6);
+  }
+
+  .text-wordle {
+    color: hsl(var(--wordle-color));
   }
 }
 
