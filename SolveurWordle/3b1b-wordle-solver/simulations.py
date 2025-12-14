@@ -1,7 +1,6 @@
-import argparse
-import json
 import random
 from pathlib import Path
+import json
 
 import numpy as np
 from tqdm import tqdm
@@ -56,7 +55,7 @@ def simulate_games(
     if priors is None:
         priors = get_frequency_based_priors(game_name)
 
-    if test_set is None or test_set[0] is None:
+    if test_set is None or (len(test_set) > 0 and test_set[0] is None):
         test_set = short_word_list
 
     if shuffle:
@@ -144,7 +143,7 @@ def simulate_games(
                 "score": int(score),
                 "answer": answer,
                 "guesses": guesses,
-                "patterns": list(map(int, patterns)),
+                "patterns": patterns,
                 "reductions": possibility_counts,
             },
         )
@@ -194,71 +193,12 @@ def simulate_games(
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--game-name",
-        type=str,
-        choices=GAME_NAMES,
-        default="wordle",
-        help="Game name",
-    )
-    parser.add_argument(
-        "--first-guess",
-        type=str,
-        default=None,
-        help="Pre-computed first guess",
-    )
-    parser.add_argument(
-        "--test-answer",
-        type=str,
-        default=None,
-        help="Solution with which to test the solver",
-    )
-    parser.add_argument(
-        "--max-info",
-        dest="purely_maximize_information",
-        action="store_true",
-        help="Purely maximize information",
-    )
-    parser.add_argument(
-        "--flat-dist",
-        dest="optimize_for_uniform_distribution",
-        action="store_true",
-        help="Optimize for uniform distribution",
-    )
-    parser.add_argument(
-        "--look-ahead",
-        dest="look_two_ahead",
-        action="store_true",
-        help="Look two ahead",
-    )
-    parser.add_argument(
-        "--shuffle",
-        action="store_true",
-        help="Shuffle the test set",
-    )
-    parser.add_argument(
-        "--brute-force",
-        dest="brute_force_optimize",
-        action="store_true",
-        help="Perform brute-force optimization",
-    )
-    parser.add_argument(
-        "--hard-mode",
-        action="store_true",
-        help="Play the hard mode",
-    )
-    args = parser.parse_args()
-
+    print("--- Running standard Wordle simulation ---")
     results, decision_map = simulate_games(
-        game_name=args.game_name,
-        first_guess=args.first_guess,
-        test_set=[args.test_answer],
-        priors=get_true_wordle_prior(args.game_name),
-        purely_maximize_information=args.purely_maximize_information,
-        optimize_for_uniform_distribution=args.optimize_for_uniform_distribution,
-        look_two_ahead=args.look_two_ahead,
-        shuffle=args.shuffle,
-        brute_force_optimize=args.brute_force_optimize,
-        hard_mode=args.hard_mode,
+        game_name="wordle",
+        priors=get_true_wordle_prior("wordle"),
     )
+    print("\n--- Simulation Complete ---")
+    print(f"Average Score: {results['average_score']:.2f}")
+    print(f"Score Distribution: {results['score_distribution']}")
+    print("-----------------------------")

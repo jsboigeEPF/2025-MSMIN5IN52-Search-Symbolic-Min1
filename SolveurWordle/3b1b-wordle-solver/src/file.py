@@ -1,6 +1,9 @@
 from pathlib import Path
 
-DATA_DIR = "data"
+# The base directory of the 3b1b-wordle-solver project, which is the parent of the 'src' directory
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+DATA_DIR = BASE_DIR / "data"
 SHORT_WORD_LIST_FILE = "possible_words.txt"
 LONG_WORD_LIST_FILE = "allowed_words.txt"
 WORD_FREQ_FILE = "wordle_words_freq_full.txt"
@@ -14,7 +17,7 @@ def get_data_dir(game_name):
 
 
 def get_data_fname(game_name, file):
-    return Path(get_data_dir(game_name)) / file
+    return get_data_dir(game_name) / file
 
 
 def get_short_word_list_fname(game_name):
