@@ -1,4 +1,5 @@
 import random
+import sys
 
 from src.pattern import get_pattern, pattern_to_string
 from src.prior import get_word_list
@@ -6,11 +7,15 @@ from src.prior import get_word_list
 GAME_NAMES = ["wordle"]
 
 
-def play_wordle_game(game_name="wordle"):
+def play_wordle_game(game_name="wordle", secret_word=None):
     all_words = get_word_list(game_name, short=False)
     short_word_list = get_word_list(game_name, short=True)
 
-    secret_word = random.choice(short_word_list)
+    if secret_word is None:
+        secret_word = random.choice(short_word_list)
+    elif secret_word not in all_words:
+        print(f"Error: '{secret_word}' is not a valid word.", file=sys.stderr)
+        return
     
     print("--- Welcome to Interactive Wordle! ---")
     print("I have picked a 5-letter word. You have 6 guesses to find it.")
@@ -49,4 +54,10 @@ def play_wordle_game(game_name="wordle"):
 
 
 if __name__ == "__main__":
-    play_wordle_game()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Play Wordle interactively.")
+    parser.add_argument("--word", type=str, default=None, help="A specific word to play with.")
+    args = parser.parse_args()
+
+    play_wordle_game(secret_word=args.word)

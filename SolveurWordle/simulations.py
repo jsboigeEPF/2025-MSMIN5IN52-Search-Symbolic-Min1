@@ -193,10 +193,27 @@ def simulate_games(
 
 
 if __name__ == "__main__":
+    import argparse
+    import sys
+
+    parser = argparse.ArgumentParser(description="Run Wordle simulations.")
+    parser.add_argument("--word", type=str, default=None, help="A specific word to test against.")
+    args = parser.parse_args()
+
+    test_set = None
+    if args.word:
+        # Validate word
+        all_words = get_word_list("wordle", short=False)
+        if args.word not in all_words:
+            print(f"Error: '{args.word}' is not a valid word.", file=sys.stderr)
+            sys.exit(1)
+        test_set = [args.word]
+
     print("--- Running standard Wordle simulation ---")
     results, decision_map = simulate_games(
         game_name="wordle",
         priors=get_true_wordle_prior("wordle"),
+        test_set=test_set,
     )
     print("\n--- Simulation Complete ---")
     print(f"Average Score: {results['average_score']:.2f}")
