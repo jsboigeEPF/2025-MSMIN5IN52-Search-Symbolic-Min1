@@ -1,0 +1,153 @@
+<div class="background-decoration">
+  <div class="floating-shape shape-1"></div>
+  <div class="floating-shape shape-2"></div>
+  <div class="floating-shape shape-3"></div>
+  <div class="floating-shape shape-4"></div>
+  <div class="floating-shape shape-5"></div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <h1>🎯 Cemantix</h1>
+    <p class="subtitle">Trouvez le mot secret grâce à la proximité sémantique</p>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls">
+      <label class="control-label">
+        Nombre d'essais max :
+        <input type="number" [(ngModel)]="maxAttempts" min="1" max="20" class="control-input">
+      </label>
+      <button (click)="newGame()" class="btn-primary">🎲 Nouvelle partie</button>
+      <button (click)="aiSuggest()" class="btn-ai-suggest" [disabled]="!gameId || finished || aiSuggesting">
+        <span *ngIf="!aiSuggesting">💡 Suggestion LLM</span>
+        <span *ngIf="aiSuggesting">⏳ Réflexion...</span>
+      </button>
+      <button (click)="aiSolve()" class="btn-ai" [disabled]="!gameId || finished || aiSolving">
+        <span *ngIf="!aiSolving">🤖 LLM résout</span>
+        <span *ngIf="aiSolving">⏳ Résolution...</span>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="gameId" class="game-area">
+    <div class="game-info">
+      <div class="info-badge" *ngIf="history.length > 0">
+        <span class="info-label">Meilleur score</span>
+        <span class="info-value">{{getBestScore()}}%</span>
+      </div>
+      <div class="info-badge" *ngIf="history.length === 0">
+        <span class="info-label">Nouvelle partie</span>
+        <span class="info-value">🎯</span>
+      </div>
+      <div class="info-badge" [class.danger]="remaining <= 2">
+        <span class="info-label">Essais restants</span>
+        <span class="info-value">{{remaining}}</span>
+      </div>
+      <div class="info-badge">
+        <span class="info-label">Tentatives</span>
+        <span class="info-value">{{history.length}}/{{maxAttempts}}</span>
+      </div>
+    </div>
+
+    <div class="guess-card">
+      <div class="guess">
+        <input [(ngModel)]="guessText" placeholder="Entrez un mot en français..." (keyup.enter)="submitGuess()" class="guess-input" [disabled]="finished">
+        <button (click)="submitGuess()" class="btn-submit" [disabled]="finished">
+          ✨ Proposer
+        </button>
+      </div>
+      <div *ngIf="aiSuggestion" class="ai-suggestion-card">
+        <div class="suggestion-header">
+          <span class="suggestion-icon">💡</span>
+          <span class="suggestion-title">Suggestion du LLM</span>
+        </div>
+        <div class="suggestion-content">
+          <div class="suggestion-word-container">
+            <span class="suggestion-word-label">Mot proposé :</span>
+            <span class="suggestion-word">{{aiSuggestion}}</span>
+          </div>
+          <button (click)="useAISuggestion()" class="btn-use-suggestion" [disabled]="finished">
+            ✨ Utiliser cette suggestion
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="message-card" *ngIf="message" [class.success]="won" [class.warning]="finished && !won">
+      <span class="message-icon">{{won ? '🎉' : finished ? '😔' : 'ℹ️'}}</span>
+      <span>{{message}}</span>
+    </div>
+
+    <div class="add-attempts-card" *ngIf="finished && !won && gameId && !targetWord">
+      <div class="add-attempts-content">
+        <span class="add-attempts-label">💪 Que souhaitez-vous faire ?</span>
+        <div class="add-attempts-controls">
+          <button (click)="addAttempts(3)" class="btn-add-attempts" [disabled]="addingAttempts">
+            +3 tentatives
+          </button>
+          <button (click)="addAttempts(5)" class="btn-add-attempts" [disabled]="addingAttempts">
+            +5 tentatives
+          </button>
+          <button (click)="addAttempts(10)" class="btn-add-attempts" [disabled]="addingAttempts">
+            +10 tentatives
+          </button>
+          <button (click)="revealTarget()" class="btn-reveal-target" [disabled]="addingAttempts || revealingTarget">
+            <span *ngIf="!revealingTarget">🔍 Révéler le mot</span>
+            <span *ngIf="revealingTarget">⏳...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="target-card" *ngIf="finished && targetWord">
+      <div class="target-content">
+        <h3 class="target-label">{{won ? '🎯 Le mot à trouver était :' : '😔 Le mot à trouver était :'}}</h3>
+        <div class="target-word-display" [class.won]="won">
+          <span class="target-word-text">{{targetWord}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="history-card" *ngIf="history.length">
+      <h3 class="section-title">📊 Vos propositions</h3>
+      <div class="history-grid">
+        <div *ngFor="let row of history; let i = index" class="history-item" [class.best-score]="i === 0">
+          <div class="history-header">
+            <div class="history-left">
+              <span class="attempt-number">Essai {{row.attempt}}</span>
+              <span class="word">
+                {{row.guess}}
+                <span class="best-badge" *ngIf="i === 0">🏆</span>
+              </span>
+            </div>
+            <div class="history-right">
+              <span class="score">{{row.score.toFixed(1)}}%</span>
+              <span class="rank" *ngIf="row.rank">Rang: {{row.rank}}</span>
+            </div>
+          </div>
+          <div class="proximity-gauge-container">
+            <div class="proximity-gauge">
+              <div class="gauge-fill" 
+                   [style.width.%]="getProximityPercentage(row.score)"
+                   [style.background-color]="getGaugeColor(row.score)"
+                   [class.pulse]="isVeryClose(row.score)">
+              </div>
+            </div>
+            <span class="percentage">{{row.score.toFixed(1)}}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="top-card" *ngIf="topSimilaires.length">
+      <h4 class="section-title">🔥 Mots les plus proches</h4>
+      <div class="top-list">
+        <div *ngFor="let t of topSimilaires" class="top-item">
+          <span class="top-word">{{t.word}}</span>
+          <span class="top-score">{{(t.sim * 100).toFixed(1)}}%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

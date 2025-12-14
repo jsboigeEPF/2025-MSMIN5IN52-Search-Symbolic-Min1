@@ -1,0 +1,14 @@
+fastapi
+spacy
+uvicorn[standard]
+scikit-learn
+numpy
+python-multipart
+pydantic
+# Optional semantic model (commenter si tu veux rester léger)
+sentence-transformers
+gensim
+# LLM cloud options (optionnel - choisir selon vos besoins)
+# requests  # Déjà inclus via uvicorn, nécessaire pour HF Inference API
+google-generativeai  # Pour Google Gemini API (cloud gratuit) - REQUIS (modèle par défaut)
+# openai  # Pour OpenAI API (cloud payant)
