@@ -175,7 +175,7 @@ def suggest_csp(req: WordleRequest):
     
     if not candidates:
         return {
-            "suggested_word": "ABACA",
+            "suggested_word": None,
             "explanation": "Aucun candidat trouvé",
             "candidates_count": 0,
             "candidates": []
@@ -192,7 +192,7 @@ def suggest_csp(req: WordleRequest):
         "suggested_word": next_guess.upper(),
         "explanation": f"Suggestion CSP parmi {len(filtered_candidates)} candidats",
         "candidates_count": len(filtered_candidates),
-        "candidates": [c.upper() for c in filtered_candidates[:20]]
+        "candidates": [c.upper() for c in filtered_candidates[:30]]
     }
 
 
@@ -218,7 +218,7 @@ def suggest_hybrid(req: WordleRequest):
         
         if not candidates:
             return {
-                "suggested_word": "ABACA",
+                "suggested_word": None,
                 "explanation": "Aucun candidat trouvé",
                 "candidates_count": 0,
                 "candidates": []
@@ -246,7 +246,7 @@ def suggest_hybrid(req: WordleRequest):
             "suggested_word": llm_word.upper(),
             "explanation": f"{llm_explanation} ({len(filtered_candidates)} candidats)",
             "candidates_count": len(filtered_candidates),
-            "candidates": [c.upper() for c in filtered_candidates[:20]]
+            "candidates": [c.upper() for c in filtered_candidates[:30]]
         }
     
     except Exception as e:
@@ -294,5 +294,7 @@ def suggest_ai(req: WordSuggestionsRequest):
     return {
         "suggested_word": llm_word.upper(),
         "explanation": llm_explanation,
-        "candidates_count": len(filtered_candidates)
+        "candidates_count": len(filtered_candidates),
+        "candidates": [c.upper() for c in filtered_candidates[:30]]
+
     }

@@ -16,7 +16,7 @@ export function SolverPanel({
   const topSuggestions = solverData?.topSuggestions ?? [];
   const entropy = solverData?.entropy ?? 0;
   const bestGuess = solverData?.bestGuess ?? null;
-  const possibleWords = solverData?.possibleWords ?? [];
+  const possibleWords = (solverData?.possibleWords ?? []).filter(Boolean);
 
 
   const texts = {
@@ -118,7 +118,7 @@ export function SolverPanel({
 
       {/* Stats */}
       {remainingCount > 0 &&
-        remainingCount <= 20 &&
+        remainingCount <= 30 &&
         possibleWords.length > 0 && (
           <div>
             {" "}

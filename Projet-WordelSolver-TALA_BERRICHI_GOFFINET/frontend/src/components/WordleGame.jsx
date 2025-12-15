@@ -198,8 +198,17 @@ export function WordleGame() {
         previous_guesses: guesses.map(g => g.toLowerCase())
       });
 
-      const suggestedWord = res.data.suggested_word.toUpperCase();
+      const suggestedWord = res.data.suggested_word;
+
+      if (!suggestedWord) {
+        toast.info(language === "fr" ? "Aucune suggestion trouvée" : "No suggestion found");
+        setAiSuggestion("");
+        setCandidatesCount(0);
+        return;
+      }
+      
       setAiSuggestion(suggestedWord);
+      setCspCandidates(res.data.candidates || []);       
       setCandidatesCount(res.data.candidates_count || 0);
       
       toast.success(
@@ -235,8 +244,21 @@ export function WordleGame() {
         previous_guesses: guesses.map(g => g.toLowerCase())
       });
 
-      const suggestedWord = res.data.suggested_word.toUpperCase();
+      const suggestedWord = res.data.suggested_word;
+
+      if (!suggestedWord) {
+        toast.info(
+          language === "fr"
+            ? "Aucune suggestion trouvée"
+            : "No suggestion found"
+        );
+        setAiSuggestion("");
+        setCandidatesCount(0);
+        return;
+      }
+
       setAiSuggestion(suggestedWord);
+
       setCspCandidates(res.data.candidates || []); 
       setCandidatesCount(res.data.candidates_count || 0);
       
@@ -273,8 +295,17 @@ export function WordleGame() {
         previous_guesses: guesses.map(g => g.toLowerCase())
       });
 
-      const suggestedWord = res.data.suggested_word.toUpperCase();
-      setAiSuggestion(suggestedWord);
+      const suggestedWord = res.data.suggested_word;
+
+      if (!suggestedWord) {
+        toast.info(language === "fr" ? "Aucun candidat hybride" : "No hybrid candidate");
+        setAiSuggestion("");
+        setCspCandidates([]);
+        setCandidatesCount(0);
+        return;
+      }
+      
+      setAiSuggestion(suggestedWord);      
       setCspCandidates(res.data.candidates || []); 
       setCandidatesCount(res.data.candidates_count || 0);
       
