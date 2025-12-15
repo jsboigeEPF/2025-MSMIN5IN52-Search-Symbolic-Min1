@@ -51,10 +51,11 @@ export function WordleGame() {
   }, []);
 
   // Démarrer une nouvelle partie
-  const startNewGame = useCallback(async () => {
+  const startNewGame = useCallback(async (lang = null) => {
+    const gameLanguage = lang || language;
     try {
       const res = await axios.post(`${API_BASE_URL}/wordle/start`, null, {
-        params: { language }
+        params: { language: gameLanguage }
       });
       
       setSessionId(res.data.session_id);
@@ -69,10 +70,10 @@ export function WordleGame() {
       setCspCandidates([]);
       setTargetWord("");
       
-      toast.success(language === "fr" ? " Nouvelle partie démarrée !" : " New game started!");
+      toast.success(gameLanguage === "fr" ? "Nouvelle partie démarrée !" : "New game started!");
     } catch (error) {
       console.error("❌ Erreur:", error);
-      toast.error(language === "fr" ? "Erreur lors du démarrage" : "Error starting game");
+      toast.error(gameLanguage === "fr" ? "Erreur lors du démarrage" : "Error starting game");
     }
   }, [language]);
 
@@ -322,9 +323,10 @@ export function WordleGame() {
   }, [results, language, guesses]);
 
   const handleLanguageSwitch = useCallback(() => {
-    setLanguage((prev) => (prev === "fr" ? "en" : "fr"));
-    startNewGame();
-  }, [startNewGame]);
+    const newLanguage = language === "fr" ? "en" : "fr";
+    setLanguage(newLanguage);
+    startNewGame(newLanguage);
+  }, [language, startNewGame]);
 
   const handleSolverModeSwitch = useCallback(() => {
     setSolverMode((prev) => {
