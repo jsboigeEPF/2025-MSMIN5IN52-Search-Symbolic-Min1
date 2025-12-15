@@ -262,7 +262,7 @@ def suggest_ai(req: WordleRequest):
     """Suggère un mot basé sur IA uniquement"""
     lang = req.language.lower()
     solver = hybrid_solver_fr if lang == "fr" else hybrid_solver_en
-
+    solver.constraints = WordleConstraints()
     # Reset si nouvelle session
     if not req.previous_guesses or len(req.previous_guesses) == 0:
         solver.reset()

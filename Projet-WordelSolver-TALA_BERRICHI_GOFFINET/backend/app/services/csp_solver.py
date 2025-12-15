@@ -26,17 +26,17 @@ class WordleConstraints:
 
         # Greens
         for pos, letter in green.items():
+            pos = int(pos)
             self.green[pos] = letter
 
         # Yellows
         for pos, letters in yellow.items():
+            pos = int(pos)
             self.yellow[pos].update(letters)
 
         # Comptage min
-        counts = Counter(
-            list(green.values()) +
-            [l for letters in yellow.values() for l in letters]
-        )
+        unique_yellow_letters = set(l for letters in yellow.values() for l in letters)
+        counts = Counter(list(green.values()) + list(unique_yellow_letters))
 
         for letter, count in counts.items():
             self.min_letter_counts[letter] = max(
