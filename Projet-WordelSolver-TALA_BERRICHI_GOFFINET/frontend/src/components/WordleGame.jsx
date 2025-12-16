@@ -9,15 +9,15 @@ import { Brain, Gamepad2, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DarkModeToggle } from "./DarkModeToggle";
 import axios from "axios";
-import {evaluateGuess, buildFeedback, isValidWord, normalizeWord, getFeedbackMessage} from "@/utils/wordle.utils";
-
+import {buildFeedback, isValidWord, getFeedbackMessage} from "@/utils/wordle.utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const MAX_ATTEMPTS = 6;
 
 export function WordleGame() {
   const [language, setLanguage] = useState("fr");
-  const [solverMode, setSolverMode] = useState("hybrid");
+  const [solverMode, setSolverMode] = useState("csp");
+  const [sessionId, setSessionId] = useState(null);
   const [targetWord, setTargetWord] = useState("");
   const [guesses, setGuesses] = useState([]);
   const [results, setResults] = useState([]);
@@ -32,7 +32,6 @@ export function WordleGame() {
   const [cspCandidates, setCspCandidates] = useState([]);
 
   const currentRow = guesses.length;
-  
 
   const updateLetterStates = useCallback((newResults) => {
     setLetterStates((prev) => {
@@ -51,54 +50,97 @@ export function WordleGame() {
     });
   }, []);
 
+  // Démarrer une nouvelle partie
+  const startNewGame = useCallback(async (lang = null) => {
+    const gameLanguage = lang || language;
+    try {
+      const res = await axios.post(`${API_BASE_URL}/wordle/start`, null, {
+        params: { language: gameLanguage }
+      });
+      
+      setSessionId(res.data.session_id);
+      setGuesses([]);
+      setResults([]);
+      setCurrentGuess("");
+      setLetterStates(new Map());
+      setIsGameOver(false);
+      setIsWon(false);
+      setAiSuggestion("");
+      setCandidatesCount(0);
+      setCspCandidates([]);
+      setTargetWord("");
+      
+      toast.success(gameLanguage === "fr" ? "Nouvelle partie démarrée !" : "New game started!");
+    } catch (error) {
+      console.error("❌ Erreur:", error);
+      toast.error(gameLanguage === "fr" ? "Erreur lors du démarrage" : "Error starting game");
+    }
+  }, [language]);
+
+  // Démarrer au chargement
+  useEffect(() => {
+    startNewGame();
+  }, []);
+
   const submitGuess = useCallback(async () => {
     if (!isValidWord(currentGuess)) {
       toast.error(language === "fr" ? "Le mot doit contenir 5 lettres" : "Word must be 5 letters");
+      return;
+    }
+
+    if (!sessionId) {
+      toast.error(language === "fr" ? "Aucune partie en cours" : "No active game");
       return;
     }
   
     setIsRevealing(true);
   
     try {
-      let secret = targetWord;
-  
-      // Si le mot cible n'est pas encore défini, demander au backend
-      if (!targetWord) {
-        const feedback = buildFeedback(results);
-  
-        let endpoint;
-        if (solverMode === "csp") endpoint = "/wordle/guess/csp";
-        else if (solverMode === "hybrid") endpoint = "/wordle/guess/hybrid";
-        else endpoint = "/wordle/suggest-ai";
-  
-        const res = await axios.post(`${API_BASE_URL}${endpoint}`, {
-          feedback,
+      // Envoyer le mot au backend pour vérification
+      const res = await axios.post(`${API_BASE_URL}/wordle/check`, null, {
+        params: {
+          session_id: sessionId,
+          guess: currentGuess.toLowerCase(),
           language
-        });
-  
-        secret = (res.data.next_guess || res.data.suggested_word).toUpperCase();
-        setTargetWord(secret);
+        }
+      });
+
+      // Le backend renvoie le feedback réel
+      const backendFeedback = res.data.feedback;
+      
+      // Convertir le feedback pour l'affichage
+      const resultRow = [];
+      for (let i = 0; i < 5; i++) {
+        const letter = currentGuess[i].toUpperCase();
+        let state = "absent";
+        
+        if (backendFeedback.green[i]) {
+          state = "correct";
+        } else if (backendFeedback.yellow[i] && backendFeedback.yellow[i].includes(currentGuess[i].toLowerCase())) {
+          state = "present";
+        }
+        
+        resultRow.push({ letter, state });
       }
-  
-      // Évaluer la tentative
-      const resultRow = evaluateGuess(normalizeWord(currentGuess), normalizeWord(secret));
+      
       setGuesses(prev => [...prev, currentGuess.toUpperCase()]);
       setResults(prev => [...prev, resultRow]);
       updateLetterStates(resultRow);
       setCurrentGuess("");
   
-      const attemptCount = guesses.length + 1;
-      let feedbackMessage = "";
-  
-      if (currentGuess.toLowerCase() === secret.toLowerCase()) {
+      // Vérifier résultat
+      if (res.data.is_correct) {
         setIsWon(true);
         setIsGameOver(true);
-        feedbackMessage = getFeedbackMessage(true, attemptCount, language);
-        toast.success(feedbackMessage);
-      } else if (attemptCount >= MAX_ATTEMPTS) {
+        setTargetWord(currentGuess.toUpperCase());
+        const message = getFeedbackMessage(true, guesses.length + 1, language);
+        toast.success(message);
+      } else if (res.data.is_game_over) {
         setIsGameOver(true);
-        feedbackMessage = getFeedbackMessage(false, attemptCount, language);
-        toast.error(`${feedbackMessage} ${language === "fr" ? "Le mot était :" : "The word was:"} ${secret.toUpperCase()}`);
+        setTargetWord(res.data.secret_word);
+        toast.error(
+          `${language === "fr" ? "Perdu ! Le mot était :" : "Game Over! The word was:"} ${res.data.secret_word}`
+        );
       }
   
       setIsRevealing(false);
@@ -108,8 +150,7 @@ export function WordleGame() {
       toast.error(errorMsg);
       setIsRevealing(false);
     }
-  }, [currentGuess, results, guesses, updateLetterStates, language, targetWord, solverMode]);
-  
+  }, [currentGuess, sessionId, guesses, updateLetterStates, language]);
 
   const handleKeyPress = useCallback(
     (key) => {
@@ -134,17 +175,8 @@ export function WordleGame() {
   }, [handleKeyPress]);
 
   const handleNewGame = useCallback(() => {
-    setTargetWord("");
-    setGuesses([]);
-    setResults([]);
-    setCurrentGuess("");
-    setLetterStates(new Map());
-    setIsGameOver(false);
-    setIsWon(false);
-    setAiSuggestion("");
-    setCandidatesCount(0);
-    setCspCandidates([]);
-  }, []);
+    startNewGame();
+  }, [startNewGame]);
 
   const handleRequestAI = useCallback(async () => {
     if (results.length === 0) {
@@ -161,17 +193,29 @@ export function WordleGame() {
         grey: feedback.grey
       };
 
-      const res = await axios.post(`${API_BASE_URL}/wordle/suggest-ai`, {
+      const res = await axios.post(`${API_BASE_URL}/wordle/suggest/ai`, {
         feedback: convertFeedback,
         language,
         previous_guesses: guesses.map(g => g.toLowerCase())
       });
 
-      setAiSuggestion(res.data.suggested_word.toUpperCase());
+      const suggestedWord = res.data.suggested_word;
+
+      if (!suggestedWord) {
+        toast.info(language === "fr" ? "Aucune suggestion trouvée" : "No suggestion found");
+        setAiSuggestion("");
+        setCandidatesCount(0);
+        return;
+      }
+      
+      setAiSuggestion(suggestedWord);
+      setCspCandidates(res.data.candidates || []);       
       setCandidatesCount(res.data.candidates_count || 0);
-      toast.success(language === "fr" ? `Suggestion IA: ${res.data.suggested_word}` : `AI Suggestion: ${res.data.suggested_word}`, {
-        description: res.data.explanation, duration: 5000
-      });
+      
+      toast.success(
+        language === "fr" ? ` Suggestion IA: ${suggestedWord}` : ` AI Suggestion: ${suggestedWord}`, 
+        { description: res.data.explanation, duration: 5000 }
+      );
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.detail || "Erreur");
@@ -179,9 +223,7 @@ export function WordleGame() {
       setIsLoadingAI(false);
     }
   }, [results, language, guesses]);
-  
 
-  // Nouvelle fonction pour les suggestions CSP
   const handleRequestCSP = useCallback(async () => {
     if (results.length === 0) {
       toast.info(language === "fr" ? "Faites au moins une tentative" : "Make at least one attempt");
@@ -191,23 +233,48 @@ export function WordleGame() {
     setIsLoadingAI(true);
     try {
       const feedback = buildFeedback(results);
-      const res = await axios.post(`${API_BASE_URL}/wordle/guess/csp`, { feedback, language });
+      const convertFeedback = {
+        green: Object.fromEntries(Object.entries(feedback.green).map(([k,v]) => [parseInt(k), v])),
+        yellow: Object.fromEntries(Object.entries(feedback.yellow).map(([k,v]) => [parseInt(k), v])),
+        grey: feedback.grey
+      };
 
-      setAiSuggestion(res.data.next_guess.toUpperCase());
-      setCspCandidates(res.data.candidates || []); 
-      setCandidatesCount(res.data.candidates?.length || 0);
-      toast.success(language === "fr" ? `Suggestion CSP: ${res.data.next_guess}` : `CSP Suggestion: ${res.data.next_guess}`, {
-        description: res.data.explanation, duration: 5000
+      const res = await axios.post(`${API_BASE_URL}/wordle/suggest/csp`, {
+        feedback: convertFeedback,
+        language,
+        previous_guesses: guesses.map(g => g.toLowerCase())
       });
+
+      const suggestedWord = res.data.suggested_word;
+
+      if (!suggestedWord) {
+        toast.info(
+          language === "fr"
+            ? "Aucune suggestion trouvée"
+            : "No suggestion found"
+        );
+        setAiSuggestion("");
+        setCandidatesCount(0);
+        return;
+      }
+
+      setAiSuggestion(suggestedWord);
+
+      setCspCandidates(res.data.candidates || []); 
+      setCandidatesCount(res.data.candidates_count || 0);
+      
+      toast.success(
+        language === "fr" ? ` Suggestion CSP: ${suggestedWord}` : ` CSP Suggestion: ${suggestedWord}`, 
+        { description: res.data.explanation, duration: 5000 }
+      );
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.detail || "Erreur");
     } finally {
       setIsLoadingAI(false);
     }
-  }, [results, language]);
+  }, [results, language, guesses]);
 
-  // Nouvelle fonction pour les suggestions hybrides
   const handleRequestHybrid = useCallback(async () => {
     if (results.length === 0) {
       toast.info(language === "fr" ? "Faites au moins une tentative" : "Make at least one attempt");
@@ -217,26 +284,49 @@ export function WordleGame() {
     setIsLoadingAI(true);
     try {
       const feedback = buildFeedback(results);
-      const res = await axios.post(`${API_BASE_URL}/wordle/guess/hybrid`, { feedback, language });
+      const convertFeedback = {
+        green: Object.fromEntries(Object.entries(feedback.green).map(([k,v]) => [parseInt(k), v])),
+        yellow: Object.fromEntries(Object.entries(feedback.yellow).map(([k,v]) => [parseInt(k), v])),
+        grey: feedback.grey
+      };
 
-      setAiSuggestion(res.data.next_guess.toUpperCase());
-      setCspCandidates(res.data.candidates || []); 
-      setCandidatesCount(res.data.candidates?.length || 0);
-      toast.success(language === "fr" ? `Suggestion Hybride: ${res.data.next_guess}` : `Hybrid Suggestion: ${res.data.next_guess}`, {
-        description: res.data.explanation, duration: 5000
+      const res = await axios.post(`${API_BASE_URL}/wordle/suggest/hybrid`, {
+        feedback: convertFeedback,
+        language,
+        previous_guesses: guesses.map(g => g.toLowerCase())
       });
+
+      const suggestedWord = res.data.suggested_word;
+
+      if (!suggestedWord) {
+        toast.info(language === "fr" ? "Aucun candidat hybride" : "No hybrid candidate");
+        setAiSuggestion("");
+        setCspCandidates([]);
+        setCandidatesCount(0);
+        return;
+      }
+      
+      setAiSuggestion(suggestedWord);      
+      setCspCandidates(res.data.candidates || []); 
+      setCandidatesCount(res.data.candidates_count || 0);
+      
+      toast.success(
+        language === "fr" ? ` Suggestion Hybride: ${suggestedWord}` : ` Hybrid Suggestion: ${suggestedWord}`, 
+        { description: res.data.explanation, duration: 5000 }
+      );
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.detail || "Erreur");
     } finally {
       setIsLoadingAI(false);
     }
-  }, [results, language]);
+  }, [results, language, guesses]);
 
   const handleLanguageSwitch = useCallback(() => {
-    setLanguage((prev) => (prev === "fr" ? "en" : "fr"));
-    handleNewGame();
-  }, [handleNewGame]);
+    const newLanguage = language === "fr" ? "en" : "fr";
+    setLanguage(newLanguage);
+    startNewGame(newLanguage);
+  }, [language, startNewGame]);
 
   const handleSolverModeSwitch = useCallback(() => {
     setSolverMode((prev) => {
@@ -244,8 +334,7 @@ export function WordleGame() {
       if (prev === "hybrid") return "ai";
       return "csp";
     });
-    handleNewGame();
-  }, [handleNewGame]);
+  }, []);
 
   const solverModeLabel = {
     csp: language === "fr" ? "CSP Seul" : "CSP Only",
@@ -268,34 +357,20 @@ export function WordleGame() {
             <div>
               <h1 className="text-xl font-bold text-foreground">Wordle CSP</h1>
               <p className="text-xs text-muted-foreground">
-                {language === "fr"
-                  ? "Solveur par contraintes + LLM"
-                  : "CSP Solver + LLM"}
+                {language === "fr" ? "Solveur par contraintes + LLM" : "CSP Solver + LLM"}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleLanguageSwitch}
-              className="flex items-center gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
-            >
+            <Button variant="outline" size="sm" onClick={handleLanguageSwitch} 
+              className="flex items-center gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary">
               <Globe className="w-4 h-4" />
-              <span className="font-medium">
-                {language === "fr" ? "FR" : "EN"}
-              </span>
+              <span className="font-medium">{language === "fr" ? "FR" : "EN"}</span>
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleSolverModeSwitch}
-              className="flex items-center gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
-            >
+            <Button variant="outline" size="sm" onClick={handleSolverModeSwitch}
+              className="flex items-center gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary">
               <Brain className="w-4 h-4" />
-              <span className="font-medium text-xs">
-                {solverModeLabel[solverMode]}
-              </span>
+              <span className="font-medium text-xs">{solverModeLabel[solverMode]}</span>
             </Button>
             <DarkModeToggle />
           </div>
@@ -310,13 +385,9 @@ export function WordleGame() {
                 Wordle <span className="text-foreground">Solver</span>
               </h1>
               <p className="text-sm text-muted-foreground">
-                {language === "fr"
-                  ? "Devinez moins, gagnez plus !"
-                  : "Guess less, win more!"}
+                {language === "fr" ? "Devinez le mot avec l'aide du solveur !" : "Guess the word with solver help!"}
               </p>
-              <p className="text-xs text-accent mt-1">
-                Mode: {solverModeLabel[solverMode]}
-              </p>
+              <p className="text-xs text-accent mt-1">Mode: {solverModeLabel[solverMode]}</p>
             </div>
             <GameBoard
               guesses={guesses}
@@ -338,7 +409,7 @@ export function WordleGame() {
                 topSuggestions: [],
                 entropy: 0,
                 bestGuess: null,
-                possibleWords: [],
+                possibleWords: cspCandidates,
               }}
               isLoading={isLoadingAI}
               aiSuggestion={aiSuggestion}

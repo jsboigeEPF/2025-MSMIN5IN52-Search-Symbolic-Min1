@@ -1,2000 +1,391 @@
-abaca 9
-abada 8
-abade 8
-abadé 8
-abaïa 7
-abaie 7
-abaïe 7
-abaïé 7
-abala 7
-abale 7
-abalé 7
-abats 7
-abaya 16
-abaye 16
-abayé 16
-abaza 16
-abbés 9
-abcès 9
-abdos 8
-abées 7
-abers 7
-abêti 7
-abies 7
-abima 8
-abîma 8
-abime 8
-abimé 8
-abîme 8
-abîmé 8
-ables 7
-ablua 7
-ablue 7
-ablué 7
-aboie 7
-abois 7
-abola 7
-abole 7
-abolé 7
-aboli 7
-abord 8
-abots 7
-about 7
-aboya 16
-aboyé 16
-abria 7
-abrie 7
-abrié 7
-abris 7
-abusa 7
-abuse 7
-abusé 7
-abyme 17
-açaïs 7
-accès 9
-accon 9
-accot 9
-accro 9
-accru 9
-accrû 9
-accus 9
-acène 7
-acéra 7
-acéré 7
-acère 7
-acété 7
-achat 10
-aches 10
-acide 8
-acier 7
-acini 7
-acmés 8
-acnés 7
-acolé 7
-acône 7
-acons 7
-acore 7
-acres 7
-âcres 7
-acron 7
-actai 7
-actas 7
-actât 7
-actée 7
-acter 7
-actes 7
-actés 7
-actez 16
-actif 10
-actus 7
-acute 7
-acuts 7
-acyla 16
-acyle 16
-acylé 16
-adage 7
-adèle 6
-adens 6
-adent 6
-adieu 6
-adira 6
-adire 6
-adiré 6
-adive 9
-adjas 13
-admet 7
-admis 7
-admit 7
-admît 7
-adnée 6
-adnés 6
-adobe 8
-adonc 8
-adora 6
-adore 6
-adoré 6
-adret 6
-adula 6
-adule 6
-adulé 6
-aèdes 6
-ædile 5
-ægées 5
-aequo 12
-aérai 5
-aéras 5
-aérât 5
-aérée 5
-aérer 5
-aérés 5
-aères 5
-aérez 14
-aéros 5
-æther 7
-afare 8
-afars 8
-affin 11
-affût 11
-afros 8
-agaça 8
-agace 8
-agacé 8
-agami 7
-agape 8
-agate 6
-agave 9
-agavé 9
-âgées 6
-agent 6
-agers 6
-agglo 7
-aghas 9
-agies 6
-agile 6
-agios 6
-agira 6
-agita 6
-agite 6
-agité 6
-agnat 6
-agoni 6
-agora 6
-agréa 6
-agrée 6
-agréé 6
-agrég 7
-agrès 6
-aguet 6
-aguis 6
-ahana 8
-ahane 8
-ahané 8
-ahans 8
-ahuri 8
-aicha 10
-aiche 10
-aiché 10
-aidai 6
-aidas 6
-aidât 6
-aidée 6
-aider 6
-aides 6
-aidés 6
-aidez 15
-aient 5
-aïeul 5
-aïeux 14
-aigle 6
-aigre 6
-aigri 6
-aiguë 6
-aigüe 6
-aigus 6
-ailée 5
-ailes 5
-ailés 5
-aîles 5
-ailla 5
-aille 5
-aillé 5
-aimai 6
-aimas 6
-aimât 6
-aimée 6
-aimer 6
-aimes 6
-aimés 6
-aimez 15
-ainée 5
-aînée 5
-aines 5
-ainés 5
-aînés 5
-aïnou 5
-ainsi 5
-aïoli 5
-airai 5
-airas 5
-airât 5
-airée 5
-airer 5
-aires 5
-airés 5
-airez 14
-aisai 5
-aisas 5
-aisât 5
-aisée 5
-aiser 5
-aises 5
-aisés 5
-aisez 14
-aisif 8
-aisle 5
-aisné 5
-aisys 14
-aitre 5
-aître 5
-ajonc 14
-ajour 12
-ajout 12
-akène 14
-alain 5
-album 8
-aldin 6
-aldol 6
-aléas 5
-alène 5
-alêne 5
-alêné 5
-aleph 10
-alésa 5
-alésé 5
-alèse 5
-alezé 14
-alézé 14
-alfas 8
-algal 6
-algie 6
-algol 6
-algos 6
-algue 6
-alias 5
-alibi 7
-alien 5
-alios 5
-alise 5
-alita 5
-alite 5
-alité 5
-alizé 14
-allai 5
-allas 5
-allât 5
-allée 5
-aller 5
-allés 5
-alleu 5
-allez 14
-allia 5
-allie 5
-allié 5
-almée 6
-aloès 5
-alois 5
-alors 5
-alose 5
-alpax 16
-alpes 7
-alpha 10
-alpin 7
-altos 5
-alula 5
-aluna 5
-alune 5
-aluné 5
-aluni 5
-aluns 5
-alvin 8
-alyte 14
-amant 6
-amati 6
-ambla 8
-amble 8
-amblé 8
-ambon 8
-ambra 8
-ambre 8
-ambré 8
-amena 6
-amené 6
-amène 6
-amens 6
-amère 6
-amers 6
-amibe 8
-amict 8
-amide 7
-amidé 7
-amies 6
-amine 6
-aminé 6
-amœbe 7
-amœne 5
-amome 7
-amont 6
-amour 6
-amphi 11
-ample 8
-ampli 8
-amuïe 6
-amuïr 6
-amuïs 6
-amuît 6
-amuït 6
-amura 6
-amure 6
-amuré 6
-amusa 6
-amuse 6
-amusé 6
-amyle 15
-anale 5
-anars 5
-anaux 14
-anche 10
-ancra 7
-ancre 7
-ancré 7
-andin 6
-anème 6
-aneth 8
-anets 5
-anges 6
-angla 6
-angle 6
-anglé 6
-angon 6
-angor 6
-ânier 5
-anima 6
-anime 6
-animé 6
-anion 5
-anisa 5
-anise 5
-anisé 5
-ânkhs 17
-annal 5
-année 5
-anniv 8
-anode 6
-ânons 5
-ansai 5
-ansas 5
-ansât 5
-ansée 5
-anser 5
-anses 5
-ansés 5
-ansez 14
-antan 5
-antes 5
-antre 5
-aorte 5
-aoust 5
-aoûta 5
-aoûte 5
-aoûté 5
-aouts 5
-aoûts 5
-apens 7
-apéro 7
-apert 7
-aphte 10
-apidé 8
-apiol 7
-apion 7
-aplat 7
-apnée 7
-apode 8
-apore 7
-appas 9
-appât 9
-appel 9
-appli 9
-appui 9
-aprèm 8
-après 7
-âpres 7
-aprin 7
-aptes 7
-apura 7
-apure 7
-apuré 7
-apyre 16
-arabe 7
-arasa 5
-arase 5
-arasé 5
-arbis 7
-arbre 7
-arche 10
-archi 10
-arçon 7
-ardre 6
-ardue 6
-ardus 6
-aréal 5
-arecs 7
-aréna 5
-arène 5
-arête 5
-argan 6
-argas 6
-argon 6
-argot 6
-argua 6
-argüa 6
-argue 6
-argué 6
-argüe 6
-argüé 6
-argus 6
-argux 15
-arias 5
-aride 6
-arien 5
-arisa 5
-arise 5
-arisé 5
-arité 5
-armai 6
-armas 6
-armât 6
-armée 6
-armer 6
-armes 6
-armés 6
-armet 6
-armez 15
-armon 6
-arobe 7
-arôme 6
-arqua 12
-arque 12
-arqué 12
-arrèc 7
-arrêt 5
-arrha 8
-arrhe 8
-arrhé 8
-arsin 5
-arsis 5
-artel 5
-arums 6
-aryen 14
-aryle 14
-asien 5
-asile 5
-asina 5
-asine 5
-asiné 5
-askip 16
-aspes 7
-aspic 9
-aspie 7
-aspis 7
-asple 7
-aspor 7
-asque 12
-assai 5
-asses 5
-assez 14
-assir 5
-assis 5
-assit 5
-assît 5
-aster 5
-astic 7
-astis 5
-astre 5
-astré 5
-atèle 5
-athée 8
-atlas 5
-atoca 7
-atoll 5
-atome 6
-atone 5
-atour 5
-atout 5
-âtres 5
-aubes 7
-aubin 7
-aucun 7
-audio 6
-audit 6
-augea 6
-augée 6
-auger 6
-auges 6
-augés 6
-auget 6
-augez 15
-aulne 5
-aunai 5
-aunas 5
-aunât 5
-aunée 5
-auner 5
-aunes 5
-aunés 5
-aunez 14
-aurai 5
-aural 5
-auras 5
-aurez 14
-aussi 5
-autan 5
-autel 5
-autos 5
-autre 5
-avais 8
-avait 8
-avala 8
-avale 8
-avalé 8
-avals 8
-avant 8
-avare 8
-avens 8
-avent 8
-avenu 8
-avéra 8
-avéré 8
-avère 8
-avers 8
-aveux 17
-avide 9
-avien 8
-aviez 17
-avili 8
-avina 8
-avine 8
-aviné 8
-avion 8
-avisa 8
-avise 8
-avisé 8
-aviso 8
-aviva 11
-avive 11
-avivé 11
-avoir 8
-avois 8
-avoit 8
-avons 8
-avoua 8
-avoue 8
-avoué 8
-avril 8
-awoir 14
-axais 14
-axait 14
-axant 14
-axées 14
-axène 14
-axent 14
-axera 14
-axial 14
-axiez 23
-axile 14
-axino 14
-axion 14
-axone 14
-axons 14
-ayant 14
-ayons 14
-ayoye 23
-azène 14
-azéri 14
-azète 14
-azole 14
-azote 14
-azoté 14
-azura 14
-azure 14
-azuré 14
-azurs 14
-azyme 24
-babas 9
-babie 9
-bâbie 9
-babil 9
-babis 9
-bâbis 9
-bâbye 18
-babys 18
-bâbys 18
-bâcha 12
-bâche 12
-bâché 12
-bâcla 9
-bâcle 9
-bâclé 9
-bacon 9
-bacul 9
-badée 8
-bader 8
-badés 8
-badge 9
-badgé 9
-badin 8
-baffa 13
-baffe 13
-baffé 13
-bâfra 10
-bâfre 10
-bâfré 10
-bagad 9
-bagel 8
-baggy 18
-bagne 8
-bagou 8
-bagua 8
-bague 8
-bagué 8
-bahia 10
-bahts 10
-bahut 10
-baies 7
-baiji 14
-bails 7
-bains 7
-baisa 7
-baise 7
-baisé 7
-balai 7
-balek 16
-balès 7
-balla 7
-balle 7
-ballé 7
-balme 8
-balsa 7
-balte 7
-banal 7
-banat 7
-banco 9
-bancs 9
-banda 8
-bande 8
-bandé 8
-bangs 8
-banjo 14
-banna 7
-banne 7
-banné 7
-banni 7
-bâoli 7
-barba 9
-barbe 9
-barbé 9
-barbu 9
-barda 8
-barde 8
-bardé 8
-bards 8
-barge 8
-baril 7
-barje 14
-barjo 14
-barns 7
-baron 7
-barra 7
-barre 7
-barré 7
-barri 7
-barye 16
-basai 7
-basal 7
-basas 7
-basât 7
-basée 7
-baser 7
-bases 7
-basés 7
-basez 16
-basic 9
-basin 7
-basse 7
-baste 7
-bâtai 7
-bâtas 7
-bâtât 7
-batée 7
-bâtée 7
-bâter 7
-bâtes 7
-bâtés 7
-bâtez 16
-baths 10
-bâtie 7
-batik 16
-bâtir 7
-bâtis 7
-bâtit 7
-bâtît 7
-bâton 7
-batta 7
-batte 7
-batté 7
-battu 7
-bauds 8
-bauge 8
-baugé 8
-baume 8
-bavai 10
-bavas 10
-bavât 10
-bavée 10
-baver 10
-baves 10
-bavés 10
-bavez 19
-bayai 16
-bayas 16
-bayât 16
-bayer 16
-bâyer 16
-bayes 16
-bayez 25
-bayou 16
-bazar 16
-bazou 16
-beach 12
-béais 7
-béait 7
-béals 7
-béant 7
-béate 7
-béats 7
-beauf 10
-beaux 16
-bébés 9
-bêcha 12
-beche 12
-bêche 12
-bêché 12
-bécot 9
-becta 9
-becte 9
-becté 9
-bédés 8
-bedon 8
-bédos 8
-béées 7
-béent 7
-béera 7
-béguë 8
-bégüe 8
-bègue 8
-bégum 9
-bégus 8
-béiez 16
-beige 8
-békée 16
-békés 16
-bêlai 7
-bêlas 7
-bêlât 7
-bêlée 7
-belek 16
-bêler 7
-bêles 7
-bêlés 7
-bêlez 16
-belge 8
-belle 7
-belon 7
-bémol 8
-bendo 8
-bénef 10
-benêt 7
-bénie 7
-bénin 7
-bénir 7
-bénis 7
-bénit 7
-bénît 7
-benne 7
-béons 7
-bépos 9
-béqua 14
-béque 14
-béqué 14
-bèque 14
-berça 9
-berce 9
-bercé 9
-béret 7
-berge 8
-berle 7
-berme 8
-berna 7
-berne 7
-berné 7
-béryl 16
-bésef 10
-bêtas 7
-bétel 7
-bêtes 7
-béton 7
-bette 7
-beuhs 10
-beurk 16
-beurs 7
-bévue 10
-bezef 19
-bézef 19
-biais 7
-bibis 9
-bible 9
-bicha 12
-biche 12
-biché 12
-bicot 9
-bides 8
-bidet 8
-bidon 8
-bidou 8
-biefs 10
-biens 7
-bière 7
-biffa 13
-biffe 13
-biffé 13
-bifla 10
-bifle 10
-biflé 10
-bigla 8
-bigle 8
-biglé 8
-bigos 8
-bigot 8
-bigre 8
-bigue 8
-bijou 14
-bikai 16
-bikas 16
-bikât 16
-bikée 16
-biker 16
-bikes 16
-bikés 16
-bikez 25
-bilai 7
-bilan 7
-bilas 7
-bilât 7
-bilée 7
-biler 7
-biles 7
-bilés 7
-bilez 16
-bilié 7
-billa 7
-bille 7
-billé 7
-bills 7
-binai 7
-binas 7
-binât 7
-binée 7
-biner 7
-bines 7
-binés 7
-binez 16
-bingo 8
-binot 7
-biome 8
-bipai 9
-bipas 9
-bipât 9
-bipée 9
-biper 9
-bipes 9
-bipés 9
-bipez 18
-bique 14
-birbe 9
-birrs 7
-bisai 7
-bisas 7
-bisât 7
-bisée 7
-biser 7
-bises 7
-bisés 7
-biset 7
-bisez 16
-bison 7
-bisou 7
-bissa 7
-bisse 7
-bissé 7
-bitai 7
-bitas 7
-bitât 7
-bitch 12
-bitée 7
-biter 7
-bites 7
-bités 7
-bitez 16
-bitos 7
-bitta 7
-bitte 7
-bitté 7
-bizet 16
-bizou 16
-bizut 16
-black 18
-blair 7
-blâma 8
-blâme 8
-blâmé 8
-blanc 9
-blaps 9
-blasa 7
-blase 7
-blasé 7
-bleds 8
-blème 8
-blême 8
-blêmi 8
-blésa 7
-blésé 7
-blèse 7
-blets 7
-bleue 7
-bleui 7
-bleus 7
-bleux 16
-blini 7
-blocs 9
-blogs 8
-blond 8
-blues 7
-bluet 7
-bluff 13
-blush 10
-bluta 7
-blute 7
-bluté 7
-bobos 9
-bocal 9
-boche 12
-bocks 18
-boète 7
-boëte 7
-boeuf 10
-bœufs 9
-bogey 17
-bogie 8
-bogue 8
-boïar 7
-boira 7
-boire 7
-boisa 7
-boise 7
-boisé 7
-boita 7
-boite 7
-boité 7
-boîte 7
-boive 10
-boldo 8
-bolée 7
-bolet 7
-bolon 7
-bolos 7
-bomba 10
-bombe 10
-bombé 10
-bômes 8
-bonda 8
-bonde 8
-bondé 8
-bondi 8
-bonds 8
-bones 7
-bongo 8
-bonis 7
-bonne 7
-bonté 7
-bonus 7
-bonze 16
-booka 16
-booke 16
-booké 16
-booms 8
-boots 7
-boras 7
-borax 16
-borda 8
-borde 8
-bordé 8
-bords 8
-borée 7
-bores 7
-borés 7
-borie 7
-borna 7
-borne 7
-borné 7
-borts 7
-bosco 9
-boson 7
-bossa 7
-bosse 7
-bossé 7
-bossu 7
-botes 7
-botox 16
-botta 7
-botte 7
-botté 7
-boucs 9
-bouda 8
-boude 8
-boudé 8
-bouée 7
-boues 7
-bouge 8
-bougé 8
-bouif 10
-boula 7
-boule 7
-boulé 7
-boulu 7
-boume 8
-boumé 8
-boums 8
-bourg 8
-bouse 7
-bouta 7
-boute 7
-bouté 7
-bouts 7
-bovin 10
-boxai 16
-boxas 16
-boxât 16
-boxée 16
-boxer 16
-boxes 16
-boxés 16
-boxez 25
-boxon 16
-boyau 16
-brada 8
-brade 8
-bradé 8
-braie 7
-brais 7
-brait 7
-brama 8
-brame 8
-bramé 8
-brand 8
-brans 7
-brasa 7
-brase 7
-brasé 7
-brava 10
-brave 10
-bravé 10
-bravo 10
-braya 16
-braye 16
-brayé 16
-break 16
-brefs 10
-bréla 7
-brêla 7
-brélé 7
-brèle 7
-brêle 7
-brêlé 7
-brème 8
-brême 8
-brève 10
-bribe 9
-brick 18
-brida 8
-bride 8
-bridé 8
-bries 7
-brifa 10
-brife 10
-brifé 10
-brima 8
-brime 8
-brimé 8
-brins 7
-brios 7
-brisa 7
-brise 7
-brisé 7
-brize 16
-brocs 9
-broda 8
-brode 8
-brodé 8
-broie 7
-broma 8
-brome 8
-bromé 8
-brony 16
-brook 16
-broum 8
-brous 7
-brout 7
-broya 16
-broyé 16
-bruie 7
-bruir 7
-bruis 7
-bruit 7
-bruît 7
-brula 7
-brûla 7
-brule 7
-brulé 7
-brûle 7
-brûlé 7
-bruma 8
-brume 8
-brumé 8
-brune 7
-bruni 7
-bruns 7
-brusc 9
-brute 7
-bruts 7
-bubon 9
-bucha 12
-bûcha 12
-buche 12
-buché 12
-bûche 12
-bûché 12
-buées 7
-buggy 18
-bugle 8
-bugne 8
-buire 7
-bulbe 9
-bulla 7
-bulle 7
-bullé 7
-bulls 7
-bulot 7
-bûmes 8
-bumma 9
-bumme 9
-bummé 9
-bures 7
-burin 7
-burle 7
-burne 7
-burné 7
-buron 7
-burqa 14
-buscs 9
-buser 7
-buses 7
-busse 7
-buste 7
-butai 7
-butas 7
-butât 7
-butch 12
-butée 7
-buter 7
-butes 7
-butés 7
-bûtes 7
-butez 16
-butin 7
-butor 7
-butta 7
-butte 7
-butté 7
-buvée 10
-buvez 19
-bzous 16
-caban 9
-cabas 9
-câbla 9
-câble 9
-câblé 9
-cabot 9
-cabra 9
-cabre 9
-cabré 9
-cabri 9
-cabus 9
-cacao 9
-cacas 9
-cacha 12
-cache 12
-caché 12
-caddy 18
-cades 8
-cadet 8
-cadis 8
-cador 8
-cadra 8
-cadre 8
-cadré 8
-caduc 10
-cæcal 8
-cæcum 9
-cafés 10
-cafre 10
-cafta 10
-cafte 10
-cafté 10
-cages 8
-caget 8
-cagna 8
-cagne 8
-cagné 8
-cagot 8
-cagou 8
-cagua 8
-cague 8
-cagué 8
-cahba 12
-cahot 10
-caïds 8
-caïeu 7
-caïon 7
-cairn 7
-cajou 14
-cajun 14
-cakes 16
-calai 7
-calao 7
-calas 7
-calât 7
-calée 7
-caler 7
-cales 7
-calés 7
-calez 16
-calfs 10
-câlin 7
-calla 7
-calma 8
-calme 8
-calmé 8
-calmi 8
-calos 7
-calot 7
-calta 7
-calte 7
-calté 7
-calus 7
-calva 10
-camai 8
-camas 8
-camât 8
-camée 8
-caméo 8
-camer 8
-cames 8
-camés 8
-camez 17
-campa 10
-campe 10
-campé 10
-camps 10
-camus 8
-canai 7
-canal 7
-canas 7
-canât 7
-candi 8
-caner 7
-canes 7
-canez 16
-cange 8
-canif 10
-canin 7
-canna 7
-canne 7
-canné 7
-canoé 7
-canoë 7
-canon 7
-cañon 7
-canot 7
-canut 7
-caoua 7
-capai 9
-capas 9
-capât 9
-capéa 9
-capée 9
-capéé 9
-caper 9
-capes 9
-capés 9
-capez 18
-capon 9
-capot 9
-cappa 11
-câpre 9
-capri 9
-capse 9
-capta 9
-capte 9
-capté 9
-caqua 14
-caque 14
-caqué 14
-carai 7
-caras 7
-carat 7
-carât 7
-carda 8
-carde 8
-cardé 8
-carée 7
-carer 7
-cares 7
-carés 7
-caret 7
-carex 16
-carez 16
-cargo 8
-caria 7
-carie 7
-carié 7
-caris 7
-carma 8
-carme 8
-carmé 8
-carne 7
-carné 7
-caron 7
-carpe 9
-carra 7
-carre 7
-carré 7
-carry 16
-carta 7
-carte 7
-carté 7
-carvi 10
-casai 7
-casas 7
-casât 7
-casée 7
-caser 7
-cases 7
-casés 7
-casez 16
-cassa 7
-casse 7
-cassé 7
-caste 7
-catas 7
-catch 12
-catho 10
-catin 7
-catis 7
-catze 16
-caudé 8
-cauri 7
-causa 7
-cause 7
-causé 7
-cavai 10
-cavas 10
-cavât 10
-cavée 10
-caver 10
-caves 10
-cavés 10
-cavet 10
-cavez 19
-cayes 16
-céans 7
-cédai 8
-cédas 8
-cédât 8
-cédée 8
-céder 8
-cédés 8
-cèdes 8
-cedex 17
-cédez 17
-cèdre 8
-cégep 10
-ceins 7
-ceint 7
-celai 7
-célai 7
-celas 7
-célas 7
-celât 7
-célât 7
-celée 7
-célée 7
-celer 7
-céler 7
-celés 7
-célés 7
-cèles 7
-celez 16
-célez 16
-cella 7
-celle 7
-celte 7
-celui 7
-celuy 16
-cènes 7
-cenne 7
-censé 7
-cents 7
-cèpes 9
-cérat 7
-cerce 9
-cerfs 10
-cerna 7
-cerne 7
-cerné 7
-césar 7
-cessa 7
-cesse 7
-cessé 7
-ceste 7
-cétal 7
-cétol 7
-cette 7
-chahs 13
-chair 10
-chais 10
-châle 10
-champ 13
-chant 10
-chaos 10
-chape 12
-chapé 12
-charo 10
-chars 10
-chats 10
-chaud 11
-chaus 10
-chaut 10
-chaux 19
-cheat 10
-cheau 10
-check 21
-chefs 13
-cheik 19
-chêne 10
-chenu 10
-chéra 10
-chére 10
-chéré 10
-chère 10
-chéri 10
-chers 10
-cheum 11
-chiac 12
-chiai 10
-chias 10
-chiât 10
-chics 12
-chiée 10
-chien 10
-chier 10
-chies 10
-chiés 10
-chiez 19
-chili 10
-china 10
-chine 10
-chiné 10
-chiot 10
-chipa 12
-chipe 12
-chipé 12
-chips 12
-chnek 19
-chocs 12
-chœur 9
-choie 10
-choin 10
-choir 10
-chois 10
-choit 10
-choix 19
-choka 19
-choke 19
-choma 11
-chôma 11
-chome 11
-chomé 11
-chôme 11
-chômé 11
-chopa 12
-chope 12
-chopé 12
-choré 10
-chose 10
-chott 10
-chouf 13
-choux 19
-choya 19
-choyé 19
-chtis 10
-chues 10
-chuis 10
-chums 11
-chuta 10
-chute 10
-chuté 10
-chyle 19
-chyme 20
-cibla 9
-cible 9
-ciblé 9
-cidre 8
-ciels 7
-cieux 16
-ciguë 8
-cigüe 8
-cilié 7
-cilla 7
-cille 7
-cillé 7
-cimer 8
-cimes 8
-cinés 7
-cippe 11
-cirai 7
-ciras 7
-cirât 7
-circa 9
-cirée 7
-cirer 7
-cires 7
-cirés 7
-cirez 16
-ciron 7
-cirre 7
-cirse 7
-ciste 7
-citai 7
-citas 7
-citât 7
-citée 7
-citer 7
-cites 7
-cités 7
-citez 16
-cives 10
-civet 10
-civil 10
-clacs 9
-clade 8
-claie 7
-clair 7
-clama 8
-clame 8
-clamé 8
-clamp 10
-clams 8
-clans 7
-clapa 9
-clape 9
-clapé 9
-clapi 9
-claps 9
-clash 10
-clava 10
-clave 10
-clavé 10
-clebs 9
-clefs 10
-cleph 12
-clerc 9
-click 18
-clics 9
-clins 7
-clips 9
-clito 7
-cliva 10
-clive 10
-clivé 10
-clodo 8
-clona 7
-clone 7
-cloné 7
-clope 9
-clora 7
-clore 7
-close 7
-cloua 7
-cloud 8
-cloue 7
-cloué 7
-clous 7
-clown 16
-clubs 9
-clupe 9
-cluse 7
-coach 12
-coati 7
-cobéa 9
-cobée 9
-cobol 9
-cobra 9
-cocas 9
-cocha 12
-côcha 12
-coche 12
-coché 12
-côche 12
-côché 12
-cocon 9
-cocos 9
-cocue 9
-cocus 9
-codai 8
-codas 8
-codât 8
-codée 8
-coder 8
-codes 8
-codés 8
-codex 17
-codez 17
-codon 8
-coeur 7
-cœurs 6
-cogna 8
-cogne 8
-cogné 8
-cohue 10
-coing 8
-coins 7
-coïta 7
-coite 7
-coïte 7
-coïté 7
-coïts 7
-cokes 16
-colin 7
-colis 7
-colla 7
-colle 7
-collé 7
-coloc 9
-colon 7
-côlon 7
-colts 7
-colza 16
-comas 8
-combe 10
-comma 9
-comme 9
-commé 9
-compo 10
-comte 8
-comté 8
-conçu 9
-condé 8
-condo 8
-cônes 7
-confs 10
-conga 8
-conge 8
-congé 8
-congo 8
-cônie 7
-cônir 7
-cônis 7
-cônit 7
-cônît 7
-conne 7
-connu 7
-conso 7
-conta 7
-conte 7
-conté 7
-cools 7
-copal 9
-copia 9
-copie 9
-copié 9
-coppa 11
-copra 9
-copte 9
-coqua 14
-coque 14
-coqué 14
-coran 7
-corda 8
-corde 8
-cordé 8
-corgi 8
-coris 7
-corme 8
-corna 7
-corne 7
-corné 7
-cornu 7
-coron 7
-corps 9
-corsa 7
-corse 7
-corsé 7
-cossa 7
-cosse 7
-cossé 7
-cossu 7
-cosys 16
-cotai 7
-cotas 7
-cotât 7
-cotée 7
-coter 7
-cotes 7
-cotés 7
-côtes 7
-côtés 7
-cotez 16
-cotie 7
-cotir 7
-cotis 7
-cotit 7
-cotît 7
-coton 7
-cotre 7
-cotte 7
-couac 9
-couda 8
-coude 8
-coudé 8
-couds 8
-couic 9
-coula 7
-coule 7
-coulé 7
-coupa 9
-coupe 9
-coupé 9
-coups 9
-coure 7
-cours 7
-court 7
-couru 7
-couse 7
-cousu 7
-couta 7
-coûta 7
-coute 7
-couté 7
-coûte 7
-coûté 7
-couts 7
-coûts 7
-couva 10
-couve 10
-couvé 10
-cover 10
-coxal 16
-coyau 16
-crabe 9
-crack 18
-crade 8
-crado 8
-craie 7
-crama 8
-crame 8
-cramé 8
-crana 7
-crâna 7
-crane 7
-crané 7
-crâne 7
-crâné 7
-crans 7
-crase 7
-crash 10
-crave 10
-crawl 16
-créai 7
-créas 7
-créât 7
-credo 8
-crédo 8
-créée 7
-créer 7
-crées 7
-créés 7
-créez 16
-créma 8
-crémé 8
-crème 8
-créna 7
-créné 7
-crène 7
-crêpa 9
-crêpe 9
-crêpé 9
-crépi 9
-crépu 9
-crête 7
-crêts 7
-creux 16
-creva 10
-crevé 10
-crève 10
-criai 7
-crias 7
-criât 7
-crics 9
-criée 7
-crier 7
-cries 7
-criés 7
-criez 16
-crime 8
-crins 7
-crise 7
-croco 9
-crocs 9
-croie 7
-crois 7
-croîs 7
-croit 7
-croît 7
-croix 16
-crône 7
-cross 7
-cruel 7
-crues 7
-crûes 7
-cubai 9
-cubas 9
-cubât 9
-cubée 9
-cuber 9
-cubes 9
-cubés 9
-cubez 18
-cucue 9
-cucul 9
-cucus 9
-çûdra 8
-cuida 8
-cuide 8
-cuidé 8
-cuira 7
-cuire 7
-cuiré 7
-cuirs 7
-cuise 7
-cuita 7
-cuite 7
-cuité 7
-cuits 7
-culai 7
-culas 7
-culât 7
-culée 7
-culer 7
-cules 7
-culés 7
-culex 16
-culez 16
-culot 7
-culte 7
-cumin 8
-cumul 8
-cunni 7
-curai 7
-curas 7
-curât 7
-curée 7
-curer 7
-cures 7
-curés 7
-curez 16
-curie 7
-curry 16
-cuvai 10
-cuvas 10
-cuvât 10
-cuvée 10
-cuver 10
-cuves 10
-cuvés 10
-cuvez 19
-cyane 16
-cyans 16
-cycas 18
-cycle 18
-cyclo 18
-cygne 17
-czars 16
-dadas 7
-dæmon 6
-dagua 7
-dague 7
-dagué 7
-dahir 9
-dahus 9
-dahut 9
-daims 7
-daine 6
-daïra 6
-dalla 6
-dalle 6
-dallé 6
-dalot 6
-damai 7
-daman 7
-damas 7
-damât 7
-damée 7
-damer 7
-dames 7
-damés 7
-damez 16
-damma 8
-damna 7
-damne 7
-damné 7
-dance 8
-dandy 16
-dansa 6
-danse 6
-dansé 6
-dansè 6
-darce 8
-darda 7
-darde 7
-dardé 7
-dards 7
-darlu 6
-darne 6
-daron 6
-darse 6
-dashi 9
-datai 6
-datas 6
-datât 6
-datée 6
-dater 6
-dates 6
-datés 6
-datez 15
-datif 9
-datte 6
-dauba 8
-daube 8
-daubé 8
-deala 6
-deale 6
-dealé
+abats
+abats
+abime
+abord
+about
+abris
+abuse
+acier
+actes
+actif
+adieu
+admis
+adore
+adven
+affut
+agave
+agent
+agile
+agios
+agite
+aider
+aigle
+aigre
+aimer
+ainee
+aines
+ajout
+alarme
+album
+algue
+alias
+alibi
+allee
+allie
+allum
+alors
+alter
+amour
+amphi
+ample
+amuse
+ancre
+angle
+anime
+annee
+annex
+anode
+anone
+anser
+antes
+antre
+aorte
+apnee
+appel
+appui
+apres
+arabe
+arbre
+arche
+ardue
+argent
+argot
+aride
+armee
+arome
+arpes
+arret
+arrie
+arsen
+artel
+asile
+aspic
+aspir
+assai
+assur
+astre
+atlas
+atome
+atout
+attic
+audit
+augur
+auler
+aussi
+autel
+auteur
+autre
+avale
+avant
+avare
+avenir
+avers
+avion
+avise
+avoue
+avril
+axial
+axiom
+ayant
+azote
+azura
+bague
+balai
+balan
+balay
+balco
+balle
+balte
+banal
+banjo
+banne
+barbe
+baril
+baron
+barre
+basal
+baser
+basse
+battu
+bazar
+beaux
+beige
+belge
+belle
+benin
+berce
+berge
+berne
+besoi
+bette
+beure
+biais
+bible
+biche
+bidet
+bienn
+biere
+bijou
+bilan
+biler
+bille
+biner
+biome
+biron
+bisou
+bison
+bitte
+blanc
+bless
+bleue
+bleus
+blond
+blous
+bluff
+blush
+bocal
+bogue
+boire
+boite
+bolus
+bombe
+bonde
+bongo
+bonne
+bonus
+borde
+borne
+bosse
+botte
+bouch
+bouge
+boule
+bourg
+bouse
+boute
+bovin
+boxer
+brace
+brame
+brave
+break
+brefe
+bride
+brise
+brode
+bronx
+brous
+bruit
+brume
+brute
+buche
+buire
+bulbe
+bulle
+burin
+buter
+butin
+butor
+cable
+cache
+cacao
+cagee
+cages
+cahot
+caill
+cairn
+calin
+calme
+calot
+calva
+cambr
+camel
+cameo
+campe
+canal
+canif
+canne
+canon
+capot
+capre
+carat
+carie
+carpe
+carre
+carte
+caser
+casse
+cause
+caver
+ceint
+celui
+censé
+cerne
+cerum
+cesse
+chale
+champ
+chant
+chaos
+chape
+charm
+chass
+chaud
+chaus
+chef
+cheik
+chemi
+chene
+chial
+chien
+chiff
+chili
+chine
+chiot
+chose
+chute
+cible
+cieux
+cigle
+cime
+cinq
+cirer
+citer
+civet
+clair
+clame
+clash
+clavi
+clefs
+client
+clore
+clown
+coche
+coeur
+coing
+colin
+colle
+colza
+comas
+comet
+comte
+connu
+conte
+copie
+coque
+coran
+corde
+corne
+corps
+coton
+coude
+coule
+cours
+court
+coute
+couve
+craie
+crame
+crane
+crash
+crate
+crave
+creer
+creme
+crepe
+creux
+crime
+crise
+crois
+croix
+cruel
+cuire
+cuite
+culot
+culte
+cumin
+curie
+cycle
+cygne
+dague
+dalle
+danse
+datee
+dates
+datif
+daube
+debat
+debit
+debut
+deche
+decor
+dedie
+defer
+defie
+degre
+delai
+delit
+demie
+demis
+dense
+depot
+derme
+derni
+derou
+desir
+dessu
+detru
+deuil
+devie
+devin
+devra
+diapo
+digne
+digue
+diner
+diode
+dirai
+direc
+dirig
+disco
+dises
+dispo
+dites
+divan
+divin
+divis
+dixie
+doche
+dogme
+doigt
+doive
+dolce
+domee
+domes
+donne
+doper
+dorme
+dormi
+doser
+dotes
+douce
+douze
+doyen
+drame
+drape
+droit
+drone
+duche
+duels
+durci
+durée

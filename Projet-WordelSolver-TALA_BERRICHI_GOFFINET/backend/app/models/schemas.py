@@ -31,6 +31,10 @@ class WordSuggestionsRequest(BaseModel):
     """
     feedback: Feedback = Field(..., description="Feedback des tentatives précédentes")
     language: str = Field("fr", description="Langue du jeu ('fr' ou 'en')")
+    previous_guesses: List[str] = Field(
+        default_factory=list,
+        description="Liste des mots déjà essayés pour éviter les répétitions"
+    )
 
 class WordSuggestionsResponse(BaseModel):
     """
