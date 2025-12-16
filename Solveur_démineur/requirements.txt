@@ -1,0 +1,28 @@
+# Solveur de Démineur - Dépendances
+
+# Core dependencies
+numpy>=1.21.0
+
+# CSP Solving
+ortools>=9.5.2237
+python-constraint>=1.4.0
+
+# Deep Learning (PyTorch with CUDA support)
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Visualization
+pygame>=2.0.0
+matplotlib>=3.5.0
+
+# Data processing & utilities
+tqdm>=4.65.0
+Pillow>=9.0.0
+
+# Development & testing (optional)
+pytest>=7.0.0
+black>=23.0.0
+mypy>=1.0.0
+
+# Note: Pour installer PyTorch avec support CUDA pour RTX 3060:
+# pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
