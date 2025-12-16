@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Mots-Croisés</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Générateur de Mots-Croisés</h1>
+        
+        <div class="main-content">
+            <div class="panel editor-panel">
+                <!-- Colonne gauche : Contrôles -->
+                <div class="left-column">
+                    <h2>📝 Éditeur de Grille</h2>
+                    
+                    <div class="controls">
+                        <div class="control-group">
+                            <label>Lignes:</label>
+                            <input type="number" id="rows" value="7" min="3" max="15">
+                        </div>
+                        <div class="control-group">
+                            <label>Colonnes:</label>
+                            <input type="number" id="cols" value="7" min="3" max="15">
+                        </div>
+                        <button class="btn-secondary" onclick="createEmptyGrid()">Créer</button>
+                        <button class="btn-danger" onclick="clearGrid()">Effacer</button>
+                    </div>
+                    
+                    <div class="pattern-selector" id="patternSelector"></div>
+                    
+                    <div class="stats" id="gridStats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="statCells">0</div>
+                            <div class="stat-label">Cases blanches</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="statSlots">0</div>
+                            <div class="stat-label">Emplacements</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="statIntersections">0</div>
+                            <div class="stat-label">Intersections</div>
+                        </div>
+                    </div>
+                    
+                    <div id="statusMessage" class="status info">
+                        Créez ou modifiez la grille, puis cliquez sur "Générer"
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-success btn-large" onclick="solveGrid()" id="solveBtn">
+                            🔍 Générer la Grille
+                        </button>
+                    </div>
+                    
+                    <div class="result-actions" id="resultActions" style="display: none;">
+                        <button class="btn-play btn-large" onclick="openFullscreenGame()">
+                            🎮 Jouer
+                        </button>
+                        <button class="btn-primary btn-large" onclick="openSolutionPage()">
+                            📊 Solution
+                        </button>
+                        <button class="btn-secondary" onclick="solveGrid()">
+                            🔄 Regénérer
+                        </button>
+                    </div>
+                    
+                    <div class="instructions">
+                        <h3>💡 Instructions</h3>
+                        <ul>
+                            <li><strong>Cliquez</strong> sur une case pour la rendre noire/blanche</li>
+                            <li>Choisissez un <strong>motif prédéfini</strong> ci-dessus</li>
+                            <li>Cliquez sur <strong>Générer</strong> pour créer les mots</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Poignée de redimensionnement -->
+                <div class="resize-handle" id="resizeHandle"></div>
+                
+                <!-- Colonne droite : Grille -->
+                <div class="right-column">
+                    <div class="grid-container">
+                        <div class="grid" id="gridEditor"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PAGE SOLUTION PLEIN ÉCRAN -->
+    <div class="fullscreen-solution" id="fullscreenSolution">
+        <div class="solution-header">
+            <h2>📊 Solution</h2>
+            <div class="solution-header-actions">
+                <button class="btn-play" onclick="closeSolutionOpenGame()">🎮 Jouer</button>
+                <button class="close-btn" onclick="closeSolutionPage()" title="Fermer">✕</button>
+            </div>
+        </div>
+        
+        <div class="solution-layout">
+            <!-- Définitions Horizontales -->
+            <div class="solution-definitions">
+                <h3><span class="icon">➡️</span> Horizontalement</h3>
+                <div id="solHorizontalWords"></div>
+            </div>
+            
+            <!-- Grille Solution -->
+            <div class="solution-center">
+                <div class="solution-grid-container">
+                    <div class="grid" id="solGrid"></div>
+                </div>
+            </div>
+            
+            <!-- Définitions Verticales -->
+            <div class="solution-definitions">
+                <h3><span class="icon">⬇️</span> Verticalement</h3>
+                <div id="solVerticalWords"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODE JEU PLEIN ÉCRAN -->
+    <div class="fullscreen-game" id="fullscreenGame">
+        <div class="game-header">
+            <h2>🎯 Mots-Croisés</h2>
+            <button class="close-btn" onclick="closeFullscreenGame()" title="Fermer">✕</button>
+        </div>
+        
+        <div class="game-layout">
+            <!-- Définitions Horizontales (gauche) -->
+            <div class="game-definitions" id="fsDefsHorizontal">
+                <h3><span class="icon">➡️</span> Horizontalement</h3>
+                <div id="fsHorizontalWords"></div>
+            </div>
+            
+            <!-- Centre : Stats + Grille + Contrôles -->
+            <div class="game-center">
+                <div class="game-stats-bar">
+                    <div class="game-stat-card">
+                        <div class="value" id="fsScore">0</div>
+                        <div class="label">⭐ Score</div>
+                    </div>
+                    <div class="game-stat-card">
+                        <div class="value" id="fsHints">0</div>
+                        <div class="label">💡 Indices</div>
+                    </div>
+                    <div class="direction-indicator" id="fsDirectionIndicator">
+                        <span class="arrow">→</span>
+                        <span>Horizontal</span>
+                    </div>
+                </div>
+                
+                <div class="game-grid-container">
+                    <div class="grid" id="fsGrid"></div>
+                </div>
+                
+                <div class="game-actions">
+                    <button class="btn-hint" onclick="revealLetterFS()">💡 Lettre</button>
+                    <button class="btn-reveal" onclick="revealWordFS()">🔤 Mot</button>
+                    <button class="btn-danger" onclick="resetGameFS()">🔄 Recommencer</button>
+                </div>
+                
+                <div class="current-def-card" id="fsCurrentDef">
+                    <div class="def-header">
+                        <span class="def-number" id="fsDefNumber">-</span>
+                        <span class="def-direction" id="fsDefDir">-</span>
+                    </div>
+                    <div class="def-text" id="fsDefText">Cliquez sur une case pour commencer</div>
+                </div>
+            </div>
+            
+            <!-- Définitions Verticales (droite) -->
+            <div class="game-definitions" id="fsDefsVertical">
+                <h3><span class="icon">⬇️</span> Verticalement</h3>
+                <div id="fsVerticalWords"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overlay de victoire -->
+    <div class="victory-overlay" id="victoryOverlay">
+        <div class="victory-card">
+            <div class="trophy">🏆</div>
+            <h2>Félicitations !</h2>
+            <p>Vous avez complété la grille !</p>
+            <div class="victory-stats">
+                <div class="victory-stat">
+                    <div class="value" id="victoryScore">0</div>
+                    <div class="label">Score</div>
+                </div>
+                <div class="victory-stat">
+                    <div class="value" id="victoryHints">0</div>
+                    <div class="label">Indices</div>
+                </div>
+            </div>
+            <button class="btn-primary" onclick="closeVictory()" style="margin-top: 20px;">Continuer</button>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

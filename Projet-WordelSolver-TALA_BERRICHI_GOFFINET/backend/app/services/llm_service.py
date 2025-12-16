@@ -24,7 +24,7 @@ class GeminiLLM:
         language: str = "fr",
         max_retries: int = 3,
         max_candidates_prompt: int = 30,
-        max_output_tokens: int = 50
+        max_output_tokens: int =200
     ) -> Tuple[str, str]:
         """Retourne le mot suggéré par le LLM avec optimisation et retry"""
 
@@ -35,6 +35,7 @@ class GeminiLLM:
 
         # Limiter le nombre de candidats dans le prompt
         prompt_candidates = candidates[:max_candidates_prompt]
+        print("promptCandidat",prompt_candidates)
 
         prompt = f"""
 Tu es un expert Wordle en {language.upper()}.
@@ -66,7 +67,8 @@ Choisis le mot avec les lettres les plus fréquentes et distinctes.
                 response = requests.post(self.endpoint, json=payload, headers=headers, timeout=10)
                 response.raise_for_status()
                 data = response.json()
-
+                print("RAW GEMINI RESPONSE:")
+                print(data)
                 # Extraction robuste du texte
                 content = ""
                 candidates_list = data.get("candidates", [])

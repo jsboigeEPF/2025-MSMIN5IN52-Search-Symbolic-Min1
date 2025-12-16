@@ -16,7 +16,7 @@ export function SolverPanel({
   const topSuggestions = solverData?.topSuggestions ?? [];
   const entropy = solverData?.entropy ?? 0;
   const bestGuess = solverData?.bestGuess ?? null;
-  const possibleWords = solverData?.possibleWords ?? [];
+  const possibleWords = (solverData?.possibleWords ?? []).filter(Boolean);
 
 
   const texts = {
@@ -36,7 +36,8 @@ export function SolverPanel({
       clickForAISuggestion: "Cliquer pour obtenir une suggestion IA",
       clickForCSPSuggestion: "Cliquer pour obtenir une suggestion CSP",
       topSuggestions: "Top suggestions",
-      remaining: "Mots restants"
+      remaining: "Mots restants :",
+      countwords: "Nombre de mots possibles :"
     },
     en: {
       title: "CSP / Hybrid / AI Solver",
@@ -54,7 +55,8 @@ export function SolverPanel({
       clickForAISuggestion: "Click to get an AI suggestion",
       clickForCSPSuggestion: "Click to get a CSP suggestion",
       topSuggestions: "Top suggestions",
-      remaining: "Remaining words"
+      remaining: "Remaining words : ",
+      countwords: "Number of possible words :"
     }
   };
 
@@ -108,7 +110,7 @@ export function SolverPanel({
       {/* Header */}
       <div className="flex items-center gap-2">
         <div className="p-2 rounded-lg bg-solver-bg glow-accent">
-          <Brain className="w-5 h-5 text-accent" />
+          <Brain className="w-8 h-8 text-accent" />
         </div>
         <div>
           <h3 className="font-semibold text-foreground">{t.title}</h3>
@@ -116,31 +118,18 @@ export function SolverPanel({
         </div>
       </div>
 
-      {/* Stats */}
-      {remainingCount > 0 &&
-        remainingCount <= 20 &&
-        possibleWords.length > 0 && (
-          <div>
-            {" "}
-            <h4 className="text-xs text-muted-foreground mb-2">
-              {" "}
-              {t.remaining} ({remainingCount}){" "}
-            </h4>{" "}
-            <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
-              {" "}
-              {possibleWords.map((word) => (
-                <span
-                  key={word}
-                  className="px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-xs font-mono border border-border/30"
-                >
-                  {" "}
-                  {word}{" "}
-                </span>
-              ))}{" "}
-            </div>{" "}
-          </div>
-        )}
-
+      {/* Nombre de mots restants */}
+      {remainingCount > 0 && (
+      <div className="p-3 rounded-lg bg-secondary/50">
+        <div className="flex items-center gap-2 text-black/60 dark:text-muted-foreground text-xs mb-1 ">
+          <Target className="w-3 h-3 " />
+          {t.countwords}
+        </div>
+        <div className="text-2xl font-bold text-foreground font-mono text-center">
+          {remainingCount}
+        </div>
+        </div>
+      )}
       {/* Best Guess */}
       {bestGuess && (
         <div className="p-3 rounded-lg bg-primary/10 border border-primary/30">
@@ -234,8 +223,9 @@ export function SolverPanel({
       {/* Remaining Words */}
       {possibleWords.length > 0 && (
         <div>
-          <h4 className="text-xs text-muted-foreground mb-2">
-            {t.remaining} ({possibleWords.length})
+          <h4 className="text-xs text-black/60 dark:text-muted-foreground mb-2 flex items-center gap-1">
+          <Target className="w-3 h-3" />
+          {t.remaining}
           </h4>
           <div className="flex flex-wrap gap-1 max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
             {possibleWords.map((word) => (

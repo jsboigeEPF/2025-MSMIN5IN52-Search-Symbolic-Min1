@@ -11,31 +11,48 @@ class WordleConstraints:
         self.yellow: Dict[int, Set[str]] = defaultdict(set)
         self.grey: Set[str] = set()
         self.min_letter_counts: Dict[str, int] = {}
+        self.max_letter_counts: Dict[str, int] = {}
+
 
     def update(self, feedback: Dict):
         green = feedback.get("green", {})
         yellow = feedback.get("yellow", {})
         grey = feedback.get("grey", [])
 
+        # Lettres présentes
+        present_letters = set(green.values())
+        for letters in yellow.values():
+            present_letters.update(letters)
+
+        # Greens
         for pos, letter in green.items():
+            pos = int(pos)
             self.green[pos] = letter
 
+        # Yellows
         for pos, letters in yellow.items():
+            pos = int(pos)
             self.yellow[pos].update(letters)
 
-        for letter in grey:
-            self.grey.add(letter)
-
-        counts = Counter(
-            list(green.values()) +
-            [l for letters in yellow.values() for l in letters]
-        )
+        # Comptage min
+        unique_yellow_letters = set(l for letters in yellow.values() for l in letters)
+        counts = Counter(list(green.values()) + list(unique_yellow_letters))
 
         for letter, count in counts.items():
             self.min_letter_counts[letter] = max(
                 self.min_letter_counts.get(letter, 0),
                 count
             )
+
+        # Greys → max occurrences
+        for letter in grey:
+            if letter not in present_letters:
+                # vraiment absent
+                self.grey.add(letter)
+                self.max_letter_counts[letter] = 0
+            else:
+                # lettre en trop → max = min
+                self.max_letter_counts[letter] = self.min_letter_counts.get(letter, 0)
 
 
 class CSPSolver:
@@ -90,6 +107,11 @@ class CSPSolver:
         # Occurrences minimales
         for letter, min_count in constraints.min_letter_counts.items():
             if word.count(letter) < min_count:
+                return False
+
+        # Occurrences maximales
+        for letter, max_count in constraints.max_letter_counts.items():
+            if word.count(letter) > max_count:
                 return False
 
         return True
